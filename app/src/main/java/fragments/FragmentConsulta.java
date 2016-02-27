@@ -17,6 +17,10 @@ import android.widget.GridView;
 
 import java.util.ArrayList;
 
+import activities.EstadoCuentaActivity;
+import activities.EstadoSiniestroActivity;
+import activities.NotificacionesActivity;
+import activities.PolizasActivity;
 import adapters.AdapterMenuGridView;
 import app.hn.com.ficohsaseguros.R;
 import dto.MenuItem;
@@ -79,12 +83,19 @@ public class FragmentConsulta  extends Fragment {
                 switch (position) {
                     case 0:
                         tipoAsistencia = "";
+                        Intent ourintentNotify = new Intent(activity, PolizasActivity.class);
+                        startActivity(ourintentNotify);
+
                         break;
                     case 1:
                         tipoAsistencia = "";
+                        Intent ourintentEstadoCuenta = new Intent(activity, EstadoCuentaActivity.class);
+                        startActivity(ourintentEstadoCuenta);
                         break;
                     case 2:
                         tipoAsistencia = "";
+                        Intent ourintentEstadoSiniestro = new Intent(activity, EstadoSiniestroActivity.class);
+                        startActivity(ourintentEstadoSiniestro);
                         break;
                     case 3:
                         tipoAsistencia = "";

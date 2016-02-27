@@ -3,15 +3,17 @@ package intentservices;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.location.LocationListener;
-
-import asyntask.CoordinateDataWebService;
+import activities.FicohsaConstants;
+import asyntask.CrearCoordenadaWebService;
+import dto.XmlContainer;
 
 /**
  * Created by mac on 26/10/15.
@@ -24,6 +26,7 @@ public class RSSPullService extends Service  {
     private static final long MIN_TIME_BW_UPDATES = 1000 * 10 * 1; // 1 minute
 
     private final Context mContext = null;
+
 
     Service thisService;
 
@@ -45,10 +48,14 @@ public class RSSPullService extends Service  {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Intent Myintent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS) ;
-            Myintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(Myintent);
-            Toast.makeText(this, "El GPS esta desactivado en tu dispositivo", Toast.LENGTH_SHORT).show();
+
+            if(XmlContainer.counterQuestionGps == 0){
+                Intent Myintent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS) ;
+                Myintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(Myintent);
+                Toast.makeText(this, "El GPS esta desactivado en tu dispositivo", Toast.LENGTH_SHORT).show();
+                XmlContainer.counterQuestionGps = 1;
+            }
         }
 
         //*******************************************************************************************************
@@ -69,8 +76,21 @@ public class RSSPullService extends Service  {
             }
         }
 
-        final String coordinates = latitudeGps + ";" + longitudeGps;
-        new CoordinateDataWebService(this).execute(coordinates);
+        //Bundle bundleProyecto = new Bundle();
+        //bundleProyecto = intent.getExtras();
+        //final String idGestion = bundleProyecto.getString("GESTION_ID");
+
+        SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String password = "";
+        String idGestion ="";
+        if (GetPrefs.contains(FicohsaConstants.PASSWORD) && GetPrefs.contains(FicohsaConstants.GESTION_ID) ) {
+            password = GetPrefs.getString(FicohsaConstants.PASSWORD, "");
+            idGestion = GetPrefs.getString(FicohsaConstants.GESTION_ID, "");
+        }
+
+
+        final String coordinates = idGestion + ";"+ latitudeGps + ";" + longitudeGps+ ";" + password;
+        new CrearCoordenadaWebService(this).execute(coordinates);
         Log.i(tag, "Service started...");
         return 1;
     }

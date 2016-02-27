@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,16 +21,25 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.gms.fitness.FitnessStatusCodes;
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 
 import app.hn.com.ficohsaseguros.DrawerItem;
 import app.hn.com.ficohsaseguros.DrawerListAdapter;
 import app.hn.com.ficohsaseguros.R;
+import asyntask.ObtenerCoordenadaWebService;
+import dto.XmlContainer;
 import fragments.FragmentConsulta;
+import fragments.FragmentEmpty;
 import fragments.FragmentMap;
 import fragments.FragmentNotificaciones;
 import fragments.FragmentPanicButton;
 import fragments.FragmentTipoAsistencia;
+import models.XmlTokenLoginResult;
 
 
 public class MainActivity extends Activity {
@@ -42,6 +53,11 @@ public class MainActivity extends Activity {
 
     private Activity activity;
 
+    private String[] tagTitles;
+
+    private XmlTokenLoginResult xmlTokenLoginResult ;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,19 +66,44 @@ public class MainActivity extends Activity {
 
         activity = this;
 
-        String[] tagTitles = getResources().getStringArray(R.array.Tags);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         ArrayList<DrawerItem> items = new ArrayList<DrawerItem>();
-        items.add(new DrawerItem(tagTitles[0],R.drawable.ic_action_wrench));
-        items.add(new DrawerItem(tagTitles[1],R.drawable.ic_action_world));
-        items.add(new DrawerItem(tagTitles[2],R.drawable.ic_action_file));
-        items.add(new DrawerItem(tagTitles[3],R.drawable.ic_action_calendar));
-        items.add(new DrawerItem(tagTitles[4],R.drawable.ic_action));
+
+
+        SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String json = "";
+        if (GetPrefs.contains(FicohsaConstants.JSON)) {
+            json = GetPrefs.getString(FicohsaConstants.JSON, "");
+            Gson gson = new Gson();
+            BufferedReader br = new BufferedReader(new StringReader(json));
+            xmlTokenLoginResult = gson.fromJson(br, XmlTokenLoginResult.class);
+        }
+
+
+        if(xmlTokenLoginResult.getEsAsegurado().equalsIgnoreCase("true")){
+            tagTitles = getResources().getStringArray(R.array.TagsCliente);
+            items.add(new DrawerItem(tagTitles[0],R.drawable.ic_action_wrench));
+            items.add(new DrawerItem(tagTitles[1],R.drawable.ic_action_world));
+            items.add(new DrawerItem(tagTitles[2],R.drawable.ic_action_file));
+            items.add(new DrawerItem(tagTitles[3],R.drawable.ic_action_calendar));
+            items.add(new DrawerItem(tagTitles[4],R.drawable.ic_action));
+
+        }else{
+            tagTitles = getResources().getStringArray(R.array.TagsMotorista);
+            items.add(new DrawerItem(tagTitles[0],R.drawable.ic_action_wrench));
+            items.add(new DrawerItem(tagTitles[1],R.drawable.ic_action_world));
+            items.add(new DrawerItem(tagTitles[2],R.drawable.ic_action_file));
+            items.add(new DrawerItem(tagTitles[3],R.drawable.ic_action_calendar));
+            items.add(new DrawerItem(tagTitles[4],R.drawable.ic_action));
+        }
+
+
+
 
         mDrawerList.setAdapter(new DrawerListAdapter(this, items));
         mTitle = mDrawerTitle = getTitle();
-        mPlanetTitles = getResources().getStringArray(R.array.Tags);
+        //mPlanetTitles = getResources().getStringArray(R.array.Tags);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -165,38 +206,66 @@ public class MainActivity extends Activity {
         Fragment fragmentConsulta = new FragmentConsulta();
         fragmentConsulta.setArguments(args);
 
+        FragmentEmpty fragmentEmpty = new FragmentEmpty();
+
+
         Fragment fragmentNotificaciones = new FragmentNotificaciones();
         fragmentNotificaciones.setArguments(args);
 
         FragmentManager fragmentManager = getFragmentManager();
-        switch (position){
-            case 0:
+
+        final String opcion = tagTitles[position];
+
+        SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+
+        switch (opcion){
+            case "Bienvenida":
+                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentEmpty).commit();
+                break;
+            case "Solicitar Asistencia":
                 fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentPanicButton).commit();
                 break;
-            case 1:
-                Intent ourintent = new Intent(activity, MapActivity.class);
-                startActivity(ourintent);
+            case "Ubicacion Asistencia":
+                //Intent ourintent = new Intent(activity, MapActivity.class);
+                //startActivity(ourintent);
+                String password="";
+                if (GetPrefs.contains(FicohsaConstants.PASSWORD)) {
+                    password = GetPrefs.getString(FicohsaConstants.PASSWORD, "");
+                }
+                new ObtenerCoordenadaWebService(this).execute(password);
+
                 break;
-            case 2:
+            case "Notificaciones":
                 Intent ourintentNotify = new Intent(activity, NotificacionesActivity.class);
                 startActivity(ourintentNotify);
                 //fragmentManager.beginTransaction().replace(R.id.conten
                 // t_frame, fragmentNotificaciones).commit();
                 break;
-            case 3:
+            case "Consultas Generales":
                 fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentConsulta).commit();
                 break;
-            case 4:
+            case "Gestiones":
+                Intent ourintenvGestiones = new Intent(activity, GestionesActivity.class);
+                startActivity(ourintenvGestiones);
+                //finish();
+                break;
+            case "Cerrar Sesion":
+                //SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = GetPrefs.edit();
+                editor.putString(FicohsaConstants.IS_LOGGED, "FALSE");
+                editor.commit();
+
                 Intent ourintenvLogin = new Intent(activity, LoginActivity.class);
                 startActivity(ourintenvLogin);
                 finish();
                 break;
+
         }
 
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(mPlanetTitles[position]);
+        //setTitle(mPlanetTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
