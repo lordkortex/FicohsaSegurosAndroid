@@ -1,9 +1,7 @@
 package fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -21,12 +19,9 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 
 import activities.FicohsaConstants;
-import activities.LoginActivity;
-import activities.MainActivity;
 import activities.TipoAsistenciaActivity;
 import app.hn.com.ficohsaseguros.R;
 import asyntask.CrearGestionWebservice;
-import dto.XmlContainer;
 import models.XmlTokenLoginResult;
 
 /**
@@ -49,7 +44,7 @@ public class FragmentPanicButton extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.panic, container, false);
+        View rootView = inflater.inflate(R.layout.activity_panic, container, false);
 
         return rootView;
     }

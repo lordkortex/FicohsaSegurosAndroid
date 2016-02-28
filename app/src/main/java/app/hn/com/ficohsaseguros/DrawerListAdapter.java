@@ -26,7 +26,7 @@ public class DrawerListAdapter extends ArrayAdapter {
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater)parent.getContext().
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.drawer_list_item, null);
+            convertView = inflater.inflate(R.layout.activity_drawer_list_item, null);
         }
 
 

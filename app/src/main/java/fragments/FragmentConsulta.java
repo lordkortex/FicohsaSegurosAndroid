@@ -1,13 +1,10 @@
 package fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +16,6 @@ import java.util.ArrayList;
 
 import activities.EstadoCuentaActivity;
 import activities.EstadoSiniestroActivity;
-import activities.NotificacionesActivity;
 import activities.PolizasActivity;
 import adapters.AdapterMenuGridView;
 import app.hn.com.ficohsaseguros.R;
@@ -42,7 +38,7 @@ public class FragmentConsulta  extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tipoasistencia, container, false);
+        View rootView = inflater.inflate(R.layout.activity_grid_consultas_generales, container, false);
 
         return rootView;
     }
@@ -59,17 +55,17 @@ public class FragmentConsulta  extends Fragment {
         //*******************************************************************************************************
         // Cargando Menu Principal
         //*******************************************************************************************************
-        Bitmap Poliza = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_action_as_e);
-        Bitmap EstadoCuenta = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_action_as_d);
-        Bitmap EstadoSiniestro = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_action_as_f);
+        Bitmap Poliza = BitmapFactory.decodeResource(this.getResources(), R.drawable.profile);
+        Bitmap EstadoCuenta = BitmapFactory.decodeResource(this.getResources(), R.drawable.account_status);
+        Bitmap EstadoSiniestro = BitmapFactory.decodeResource(this.getResources(), R.drawable.status);
 
         gridArray.add(new MenuItem(Poliza, "Poliza"));
         gridArray.add(new MenuItem(EstadoCuenta, "Estado de Cuenta"));
-        gridArray.add(new MenuItem(EstadoSiniestro, "Estado de Siniestros"));
+        gridArray.add(new MenuItem(EstadoSiniestro, "Estado de Tramites"));
 
 
         gridView = (GridView) getActivity().findViewById(R.id.gridView1);
-        customGridAdapter = new AdapterMenuGridView(getActivity(), R.layout.tipoasistenciaitem, gridArray);
+        customGridAdapter = new AdapterMenuGridView(getActivity(), R.layout.activiry_tipoasistencia_item, gridArray);
         gridView.setAdapter(customGridAdapter);
 
 

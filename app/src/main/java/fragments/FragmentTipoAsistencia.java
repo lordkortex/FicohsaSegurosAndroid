@@ -1,9 +1,7 @@
 package fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -28,7 +26,6 @@ import adapters.AdapterMenuGridView;
 import app.hn.com.ficohsaseguros.R;
 import asyntask.CrearGestionWebservice;
 import dto.MenuItem;
-import dto.XmlContainer;
 import models.XmlTokenLoginResult;
 
 /**
@@ -51,7 +48,7 @@ public class FragmentTipoAsistencia extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.tipoasistencia, container, false);
+        View rootView = inflater.inflate(R.layout.activity_grid_tipoasistencia, container, false);
 
         return rootView;
     }
@@ -74,12 +71,12 @@ public class FragmentTipoAsistencia extends Fragment {
         //*******************************************************************************************************
         // Cargando Menu Principal
         //*******************************************************************************************************
-        Bitmap Ambulancia = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_action_as_a);
-        Bitmap Grua = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_action_as_b);
-        Bitmap Gasolina = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_action_as_c);
-        Bitmap Bateria = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_action_as_d);
-        Bitmap Llantas = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_action_as_e);
-        Bitmap Otros = BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_action_as_f);
+        Bitmap Ambulancia = BitmapFactory.decodeResource(this.getResources(), R.drawable.ambulance);
+        Bitmap Grua = BitmapFactory.decodeResource(this.getResources(), R.drawable.crane);
+        Bitmap Gasolina = BitmapFactory.decodeResource(this.getResources(), R.drawable.gasoline);
+        Bitmap Bateria = BitmapFactory.decodeResource(this.getResources(), R.drawable.batery);
+        Bitmap Llantas = BitmapFactory.decodeResource(this.getResources(), R.drawable.tires);
+        Bitmap Otros = BitmapFactory.decodeResource(this.getResources(), R.drawable.keymaster);
 
         gridArray.add(new MenuItem(Ambulancia, "Ambulancia"));
         gridArray.add(new MenuItem(Grua, "Grua"));
@@ -90,7 +87,7 @@ public class FragmentTipoAsistencia extends Fragment {
         gridArray.add(new MenuItem(Otros, "Otros"));
 
         gridView = (GridView) getActivity().findViewById(R.id.gridView1);
-        customGridAdapter = new AdapterMenuGridView(getActivity(), R.layout.tipoasistenciaitem, gridArray);
+        customGridAdapter = new AdapterMenuGridView(getActivity(), R.layout.activiry_tipoasistencia_item, gridArray);
         gridView.setAdapter(customGridAdapter);
 
 

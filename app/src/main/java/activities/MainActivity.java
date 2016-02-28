@@ -83,19 +83,19 @@ public class MainActivity extends Activity {
 
         if(xmlTokenLoginResult.getEsAsegurado().equalsIgnoreCase("true")){
             tagTitles = getResources().getStringArray(R.array.TagsCliente);
-            items.add(new DrawerItem(tagTitles[0],R.drawable.ic_action_wrench));
-            items.add(new DrawerItem(tagTitles[1],R.drawable.ic_action_world));
-            items.add(new DrawerItem(tagTitles[2],R.drawable.ic_action_file));
-            items.add(new DrawerItem(tagTitles[3],R.drawable.ic_action_calendar));
-            items.add(new DrawerItem(tagTitles[4],R.drawable.ic_action));
+            items.add(new DrawerItem(tagTitles[0],R.drawable.home));
+            items.add(new DrawerItem(tagTitles[1],R.drawable.location));
+            items.add(new DrawerItem(tagTitles[2],R.drawable.notify));
+            items.add(new DrawerItem(tagTitles[3],R.drawable.faq));
+            items.add(new DrawerItem(tagTitles[4],R.drawable.exit));
 
         }else{
             tagTitles = getResources().getStringArray(R.array.TagsMotorista);
-            items.add(new DrawerItem(tagTitles[0],R.drawable.ic_action_wrench));
-            items.add(new DrawerItem(tagTitles[1],R.drawable.ic_action_world));
-            items.add(new DrawerItem(tagTitles[2],R.drawable.ic_action_file));
-            items.add(new DrawerItem(tagTitles[3],R.drawable.ic_action_calendar));
-            items.add(new DrawerItem(tagTitles[4],R.drawable.ic_action));
+            items.add(new DrawerItem(tagTitles[0],R.drawable.home));
+            items.add(new DrawerItem(tagTitles[1],R.drawable.location));
+            items.add(new DrawerItem(tagTitles[2],R.drawable.notify));
+            items.add(new DrawerItem(tagTitles[3],R.drawable.faq));
+            items.add(new DrawerItem(tagTitles[4],R.drawable.exit));
         }
 
 

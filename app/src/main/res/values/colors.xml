@@ -21,6 +21,12 @@
     <color name="ficohsa_dark">#005DA9</color>
     <color name="ficohsa_clear">#A5A7A9</color>
 
+    <color name="ficohsa_official_blue_medium">#32B4DA</color>
+    <color name="ficohsa_official_blue_dark">#005BAA</color>
+    <color name="ficohsa_official_gray">#BCBEC0</color>
+    <color name="ficohsa_official_blue_clear">#E1F3FD</color>
+    <color name="ficohsa_official_green">#50B748</color>
+
 
 
 </resources>
