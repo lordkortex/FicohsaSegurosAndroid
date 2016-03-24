@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import activities.FicohsaConstants;
 import adapters.AdapterMenuGridView;
 import app.hn.com.ficohsaseguros.R;
+import asyntask.CrearAsistenciaWebservice;
 import asyntask.CrearGestionWebservice;
 import dto.MenuItem;
 import models.XmlTokenLoginResult;
@@ -133,11 +134,14 @@ public class FragmentTipoAsistencia extends Fragment {
 
               }
 
+                String latitud = getArguments().getString("latitud");
+                String longitud = getArguments().getString("longitud");
+
                 Intent phoneIntent = new Intent(Intent.ACTION_CALL);
                 phoneIntent.setData(Uri.parse("tel:" + xmlTokenLoginResult.getTxtTelefonoAsistencia()));
                 startActivity(phoneIntent);
 
-                new CrearGestionWebservice(activity).execute(password + ";" + tipoAsistencia + ";0;0;android;ios");
+                new CrearAsistenciaWebservice(activity).execute(password + ";" + tipoAsistencia + ";"+ latitud +";" + longitud);
 
                 /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         getActivity());

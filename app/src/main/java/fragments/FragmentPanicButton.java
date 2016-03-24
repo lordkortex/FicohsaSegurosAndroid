@@ -21,6 +21,7 @@ import java.io.StringReader;
 import activities.FicohsaConstants;
 import activities.TipoAsistenciaActivity;
 import app.hn.com.ficohsaseguros.R;
+import asyntask.CrearAsistenciaWebservice;
 import asyntask.CrearGestionWebservice;
 import models.XmlTokenLoginResult;
 
@@ -84,7 +85,18 @@ public class FragmentPanicButton extends Fragment {
             public void onClick(View v) {
 
 
+                latitud = getArguments().getString("latitud");
+                longitud = getArguments().getString("longitud");
+
+                //new CrearAsistenciaWebservice(activity).execute(password +";" + latitud + ";"+ longitud + ";" + tokenAndroid);
+
+
+
                 Intent ourintenConsultas = new Intent(activity, TipoAsistenciaActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("latitud",latitud);
+                bundle.putString("longitud",longitud);
+                ourintenConsultas.putExtras(bundle);
                 startActivity(ourintenConsultas);
 
      /*           AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(

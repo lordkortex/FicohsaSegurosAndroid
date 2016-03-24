@@ -1,5 +1,6 @@
 package asyntask;
 
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,20 +25,21 @@ import org.kxml2.kdom.Element;
 import org.kxml2.kdom.Node;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import activities.EstadoCuentaActivity;
+import activities.EstadoSiniestroActivity;
 import activities.FicohsaConstants;
-import activities.GestionesActivity;
 import activities.LoginActivity;
 import activities.MainActivity;
-import dto.XmlContainer;
-import models.XmlLocalizacionGestion;
+import activities.PolizasActivity;
+import app.hn.com.ficohsaseguros.R;
 import models.XmlMotivos;
 import models.XmlTokenLoginGestiones;
 import models.XmlTokenLoginResult;
@@ -47,7 +49,7 @@ import models.XmlTokenLoginResultItemsCoberturas;
 /**
  * Created by mac on 31/10/15.
  */
-public class LoginWebService extends AsyncTask<String, Void, String> {
+public class ConsultaWebService extends AsyncTask<String, Void, String> {
 
     private static Registration regService = null;
     private GoogleCloudMessaging gcm;
@@ -55,15 +57,16 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
     private static final String SENDER_ID = "274403199680";
 
     private Context context;
-    private static String SOAP_ACTION1 = "http://tempuri.org/tokenLogin";
+    private static String SOAP_ACTION1 = "http://tempuri.org/consultaDatos";
     private static String NAMESPACE = "http://tempuri.org/";
-    private static String METHOD_NAME1 = "tokenLogin";
+    private static String METHOD_NAME1 = "consultaDatos";
     //private static String URLWS = "http://hdavid87-001-site1.btempurl.com/WebServices/wsFicohsaApp.asmx";
     private static String URLWS = "http://207.248.66.2/WebServices/wsFicohsaApp.asmx?wsdl";
 
 
 
     private ProgressDialog Brockerdialog;
+    private String pActivityToCall;
 
 
     private static List<XmlTokenLoginGestiones> xmlLocalizacionGestionList = new ArrayList<XmlTokenLoginGestiones>();
@@ -82,7 +85,7 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
 
     }
 
-    public LoginWebService(Context context) {
+    public ConsultaWebService(Context context) {
         this.context = context;
     }
 
@@ -123,6 +126,7 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
         final String inputValues = params[0].toString();
         final String[] separatedInputValues = inputValues.split(";");
         final String pToken = separatedInputValues[0].toString();
+        pActivityToCall = separatedInputValues[1].toString();
         String response = "";
 
         try {
@@ -190,14 +194,27 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
         if(isLoggedIn){
             SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = GetPrefs.edit();
-            editor.putString(FicohsaConstants.IS_LOGGED, "TRUE");
             editor.putString(FicohsaConstants.JSON, json);
-            editor.putString(FicohsaConstants.TOKEN_ANDROID, regId);
             editor.commit();
 
-            Intent ourintent = new Intent(context, MainActivity.class);
-            this.context.startActivity(ourintent);
-            LoginActivity.activity.finish();
+            switch (pActivityToCall) {
+                case "0":
+                    Intent ourintentNotify = new Intent(context, PolizasActivity.class);
+                    this.context.startActivity(ourintentNotify);
+
+                    break;
+                case "1":
+                    Intent ourintentEstadoCuenta = new Intent(context, EstadoCuentaActivity.class);
+                    this.context.startActivity(ourintentEstadoCuenta);
+                    break;
+                case "2":
+                    Intent ourintentEstadoSiniestro = new Intent(context, EstadoSiniestroActivity.class);
+                    this.context.startActivity(ourintentEstadoSiniestro);
+                    break;
+
+            }
+
+
 
         }
 
@@ -212,30 +229,38 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
 
     private XmlTokenLoginResult parseResponse(SoapObject root) {
 
-        XmlTokenLoginResult xmlTokenLoginResult = new XmlTokenLoginResult();
+        //XmlTokenLoginResult xmlTokenLoginResult = new XmlTokenLoginResult();
+
+        SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = "";
+        if (GetPrefs.contains(FicohsaConstants.JSON)) {
+            json = GetPrefs.getString(FicohsaConstants.JSON, "");
+            Gson gson = new Gson();
+            BufferedReader br = new BufferedReader(new StringReader(json));
+            xmlTokenLoginResult = gson.fromJson(br, XmlTokenLoginResult.class);
+        }
+
 
         if(root.hasProperty("strError") && !root.getProperty("strError").toString().equals("anyType{}")) {
             String strError = root.getProperty("strError").toString();
            xmlTokenLoginResult.setStrError(strError);
         }else{
-            String EsAsegurado = root.getProperty("EsAsegurado").toString();
-            String snActivo = root.getProperty("snActivo").toString();
-            String txtTelefonoAsistencia = root.getProperty("txtTelefonoAsistencia").toString();
 
-            xmlTokenLoginResult.setEsAsegurado(EsAsegurado);
-            xmlTokenLoginResult.setSnActivo(snActivo);
-            xmlTokenLoginResult.setTxtTelefonoAsistencia(txtTelefonoAsistencia);
+                //SoapObject asegurado = (SoapObject) root.getProperty("asegurado");
 
-
-            if(root.hasProperty("asegurado")){
-                SoapObject asegurado = (SoapObject) root.getProperty("asegurado");
-
-                String nro_pol = asegurado.getProperty("nro_pol").toString();
-                String txt_ramo = asegurado.getProperty("txt_ramo").toString();
-                String txt_suc = asegurado.getProperty("txt_suc").toString();
-                String anio_pol = asegurado.getProperty("anio_pol").toString();
-                String txt_estado_pol = asegurado.getProperty("txt_estado_pol").toString();
-                String txt_contratante = asegurado.getProperty("txt_contratante").toString();
+                String nro_pol = root.getProperty("nro_pol").toString();
+                String txt_ramo = root.getProperty("txt_ramo").toString();
+                String txt_suc = root.getProperty("txt_suc").toString();
+                String anio_pol = root.getProperty("anio_pol").toString();
+                String txt_estado_pol = root.getProperty("txt_estado_pol").toString();
+                String txt_agente = root.getProperty("txt_agente").toString();
+                String cod_contratante = root.getProperty("cod_contratante").toString();
+                String txt_contratante = root.getProperty("txt_contratante").toString();
+                String fec_vig_desde = root.getProperty("fec_vig_desde").toString();
+                String fec_vig_hasta = root.getProperty("fec_vig_hasta").toString();
+                String saldo_total = root.getProperty("saldo_total").toString();
+                String saldo_vencido = root.getProperty("saldo_vencido").toString();
+                String txt_moneda = root.getProperty("txt_moneda").toString();
 
                 xmlTokenLoginResult.setAnio_pol(anio_pol);
                 xmlTokenLoginResult.setNro_pol(nro_pol);
@@ -246,9 +271,9 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
                 //xmlTokenLoginResult.setStrError(strError);
 
 
-                if(asegurado.hasProperty("items")){
+                if(root.hasProperty("items")){
 
-                    SoapObject items = (SoapObject) asegurado.getProperty("items");
+                    SoapObject items = (SoapObject) root.getProperty("items");
                     List<XmlTokenLoginResultItems> xmlTokenLoginResultItemsList = new ArrayList<XmlTokenLoginResultItems>();
                     xmlTokenLoginResult.setXmlTokenLoginResultItemsList(xmlTokenLoginResultItemsList);
 
@@ -257,23 +282,28 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
 
                         XmlTokenLoginResultItems xmlTokenLoginResultItems = new XmlTokenLoginResultItems();
 
-                        String id_item = item.getProperty("id_item").toString();
+                        //String id_item = item.getProperty("id_item").toString();
                         String cod_asegurado = item.getProperty("cod_asegurado").toString();
                         String txt_asegurado = item.getProperty("txt_asegurado").toString();
-                        String txt_chasis = item.getProperty("txt_chasis").toString();
-                        String txt_motor = item.getProperty("txt_motor").toString();
+                        String txt_tipo_vehiculo = item.getProperty("txt_tipo_vehiculo").toString();
                         String txt_placa = item.getProperty("txt_placa").toString();
-                        String sn_activo = item.getProperty("sn_activo").toString();
-                        String fec_comp = item.getProperty("fec_comp").toString();
+                        String txt_motor = item.getProperty("txt_motor").toString();
+                        String txt_chasis = item.getProperty("txt_chasis").toString();
+                        //String sn_activo = item.getProperty("sn_activo").toString();
+                        String txt_marca = item.getProperty("txt_marca").toString();
+                        String txt_modelo = item.getProperty("txt_modelo").toString();
+                        String txt_color = item.getProperty("txt_color").toString();
+                        String aaaa_modelo = item.getProperty("aaaa_modelo").toString();
 
-                        xmlTokenLoginResultItems.setId_item(id_item);
+
+                        //xmlTokenLoginResultItems.setId_item(id_item);
                         xmlTokenLoginResultItems.setCod_asegurado(cod_asegurado);
                         xmlTokenLoginResultItems.setTxt_asegurado(txt_asegurado);
                         xmlTokenLoginResultItems.setTxt_chasis(txt_chasis);
                         xmlTokenLoginResultItems.setTxt_motor(txt_motor);
                         xmlTokenLoginResultItems.setTxt_placa(txt_placa);
-                        xmlTokenLoginResultItems.setSn_activo(sn_activo);
-                        xmlTokenLoginResultItems.setFec_comp(fec_comp);
+                        //xmlTokenLoginResultItems.setSn_activo(sn_activo);
+                        //xmlTokenLoginResultItems.setFec_comp(fec_comp);
 
                         xmlTokenLoginResultItemsList.add(xmlTokenLoginResultItems);
 
@@ -292,7 +322,7 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
                                 String txt_desc_corta = cobertura.getProperty("txt_desc_corta").toString();
                                 String txt_suma = cobertura.getProperty("txt_suma").toString();
                                 String txt_deducible = cobertura.getProperty("txt_deducible").toString();
-                                String txt_moneda = cobertura.getProperty("txt_moneda").toString();
+                                //String txt_moneda = cobertura.getProperty("txt_moneda").toString();
                                 String imp_suma = cobertura.getProperty("imp_suma").toString();
                                 String imp_deducible = cobertura.getProperty("imp_deducible").toString();
 
@@ -315,7 +345,6 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
 
                 }
 
-            }
 
             if(root.hasProperty("gestiones")){
 
@@ -358,31 +387,6 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
 
             }
 
-            SoapObject tracking = (SoapObject) root.getProperty("tracking");
-            SoapObject listaMotivos = (SoapObject) tracking.getProperty("listaMotivos");
-
-            List<XmlMotivos> xmlMotivosList = new ArrayList<XmlMotivos>();
-
-
-            if(listaMotivos.hasProperty("motivosDetener")){
-                for (int h = 0; h < listaMotivos.getPropertyCount(); h++) {
-                    SoapObject motivosList = (SoapObject) listaMotivos.getProperty(h);
-                    XmlMotivos xmlMotivos = new XmlMotivos();
-                    String id_motivo = motivosList.getProperty("id_motivo").toString();
-                    String txt_motivo = motivosList.getProperty("txt_motivo").toString();
-
-                    xmlMotivos.setId_motivo(id_motivo);
-                    xmlMotivos.setTxt_motivo(txt_motivo);
-                    xmlMotivosList.add(xmlMotivos);
-
-
-                    //XmlContainer.xmlMotivosList.put(id_motivo,txt_motivo);
-
-                }
-            }
-
-            //XmlContainer.xmlMotivosList = xmlMotivosList;
-            xmlTokenLoginResult.setXmlMotivosList(xmlMotivosList);
 
         }
 

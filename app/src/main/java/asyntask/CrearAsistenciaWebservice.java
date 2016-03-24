@@ -2,10 +2,7 @@ package asyntask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import org.ksoap2.SoapEnvelope;
@@ -18,17 +15,14 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 
-import activities.FicohsaConstants;
-import activities.MainActivity;
-
 /**
  * Created by mac on 1/11/15.
  */
-public class CrearGestionWebservice extends AsyncTask<String , Void, String> {
+public class CrearAsistenciaWebservice extends AsyncTask<String , Void, String> {
     private Context context;
-    private static String SOAP_ACTION1 = "http://tempuri.org/nuevaGestion";
+    private static String SOAP_ACTION1 = "http://tempuri.org/nuevaAsistencia";
     private static String NAMESPACE = "http://tempuri.org/";
-    private static String METHOD_NAME1 = "nuevaGestion";
+    private static String METHOD_NAME1 = "nuevaAsistencia";
     //private static String URLWS = "http://hdavid87-001-site1.btempurl.com/WebServices/wsFicohsaApp.asmx";
     private static String URLWS = "http://207.248.66.2/WebServices/wsFicohsaApp.asmx?wsdl";
 
@@ -48,7 +42,7 @@ public class CrearGestionWebservice extends AsyncTask<String , Void, String> {
 
     }
 
-    public CrearGestionWebservice(Context context) {
+    public CrearAsistenciaWebservice(Context context) {
         this.context = context;
     }
 
@@ -58,9 +52,10 @@ public class CrearGestionWebservice extends AsyncTask<String , Void, String> {
         final String inputValues = params[0].toString();
         final String[] separatedInputValues = inputValues.split(";");
         final String pToken = separatedInputValues[0].toString();
-        final String pLatitud = separatedInputValues[1].toString();
-        final String pLongitud =  separatedInputValues[2].toString();
-        final String pTokenAndroid =  separatedInputValues[3].toString();
+        final String pTipoAsistencia =  separatedInputValues[1].toString();
+        final String pLatitud = separatedInputValues[2].toString();
+        final String pLongitud =  separatedInputValues[3].toString();
+        //final String pTokenAndroid =  separatedInputValues[3].toString();
         String xml = "";
 
 
@@ -79,17 +74,16 @@ public class CrearGestionWebservice extends AsyncTask<String , Void, String> {
             request.addProperty("pTokenAndroid", pTokenAndroid);
             request.addProperty("pTokenIos", pTokenIos);*/
 
+            request.addProperty("pIdGestion", "0");
+            request.addProperty("pIdTipoAsistencia", pTipoAsistencia);
+            request.addProperty("pIdEqRma", "0");
+
+
             request.addProperty("pToken", pToken);
-            request.addProperty("pSnSiniestro", "1");
             request.addProperty("pLatitud", pLatitud);
             request.addProperty("pLongitud", pLongitud);
             //request.addProperty("pTokenAndroid", pTokenAndroid);
             //request.addProperty("pTokenIos", "");
-            request.addProperty("pCodRamo", "0");
-            request.addProperty("pCodSuc", "0");
-            request.addProperty("pNumPol", "0");
-            request.addProperty("pAaaaPol", "0");
-            request.addProperty("pCodAsegurado", "0");
 
             envelope.dotNet = true;
             HttpTransportSE androidHttpTransport = new HttpTransportSE(URLWS,20000);

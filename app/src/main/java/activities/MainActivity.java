@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import app.hn.com.ficohsaseguros.DrawerItem;
 import app.hn.com.ficohsaseguros.DrawerListAdapter;
 import app.hn.com.ficohsaseguros.R;
+import asyntask.ConsultaWebService;
 import asyntask.ObtenerCoordenadaWebService;
 import dto.XmlContainer;
 import fragments.FragmentConsulta;
@@ -246,6 +247,10 @@ public class MainActivity extends Activity implements LocationListener {
         final String opcion = tagTitles[position];
 
         SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String password="";
+        if (GetPrefs.contains(FicohsaConstants.PASSWORD)) {
+            password = GetPrefs.getString(FicohsaConstants.PASSWORD, "");
+        }
 
         switch (opcion){
             case "Bienvenida":
@@ -257,10 +262,6 @@ public class MainActivity extends Activity implements LocationListener {
             case "Ubicacion Asistencia":
                 //Intent ourintent = new Intent(activity, MapActivity.class);
                 //startActivity(ourintent);
-                String password="";
-                if (GetPrefs.contains(FicohsaConstants.PASSWORD)) {
-                    password = GetPrefs.getString(FicohsaConstants.PASSWORD, "");
-                }
                 new ObtenerCoordenadaWebService(this).execute(password);
 
                 break;

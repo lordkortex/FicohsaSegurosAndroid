@@ -25,8 +25,18 @@ public class TipoAsistenciaActivity extends Activity {
         setContentView(R.layout.activity_main);
         getActionBar().setTitle("Tipo Asistencia");
 
+        Bundle bundle = getIntent().getExtras();
+        String latitud = bundle.getString("latitud");
+        String longitud = bundle.getString("longitud");
+
         FragmentManager fragmentManager = getFragmentManager();
         Fragment fragmentTipoAsistencia = new FragmentTipoAsistencia();
+
+        Bundle args = new Bundle();
+        args.putString("latitud", latitud);
+        args.putString("longitud", longitud);
+        fragmentTipoAsistencia.setArguments(args);
+
         fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentTipoAsistencia).commit();
 
 

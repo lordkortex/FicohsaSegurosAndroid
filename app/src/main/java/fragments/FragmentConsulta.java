@@ -3,9 +3,11 @@ package fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +18,11 @@ import java.util.ArrayList;
 
 import activities.EstadoCuentaActivity;
 import activities.EstadoSiniestroActivity;
+import activities.FicohsaConstants;
 import activities.PolizasActivity;
 import adapters.AdapterMenuGridView;
 import app.hn.com.ficohsaseguros.R;
+import asyntask.ConsultaWebService;
 import dto.MenuItem;
 
 /**
@@ -30,6 +34,7 @@ public class FragmentConsulta  extends Fragment {
     private AdapterMenuGridView customGridAdapter;
     private GridView gridView;
     private Activity activity;
+    String password="";
 
     public FragmentConsulta() {
         // Empty constructor required for fragment subclasses
@@ -68,6 +73,13 @@ public class FragmentConsulta  extends Fragment {
         customGridAdapter = new AdapterMenuGridView(getActivity(), R.layout.activiry_tipoasistencia_item, gridArray);
         gridView.setAdapter(customGridAdapter);
 
+        SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+
+        if (GetPrefs.contains(FicohsaConstants.PASSWORD)) {
+            password = GetPrefs.getString(FicohsaConstants.PASSWORD, "");
+        }
+
+
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -78,31 +90,14 @@ public class FragmentConsulta  extends Fragment {
 
                 switch (position) {
                     case 0:
-                        tipoAsistencia = "";
-                        Intent ourintentNotify = new Intent(activity, PolizasActivity.class);
-                        startActivity(ourintentNotify);
-
+                        new ConsultaWebService(activity).execute(password + ";0");
                         break;
                     case 1:
-                        tipoAsistencia = "";
-                        Intent ourintentEstadoCuenta = new Intent(activity, EstadoCuentaActivity.class);
-                        startActivity(ourintentEstadoCuenta);
+                        new ConsultaWebService(activity).execute(password + ";1");
                         break;
                     case 2:
-                        tipoAsistencia = "";
-                        Intent ourintentEstadoSiniestro = new Intent(activity, EstadoSiniestroActivity.class);
-                        startActivity(ourintentEstadoSiniestro);
+                        new ConsultaWebService(activity).execute(password + ";2");
                         break;
-                    case 3:
-                        tipoAsistencia = "";
-                        break;
-                    case 4:
-                        tipoAsistencia = "";
-                        break;
-                    case 5:
-                        tipoAsistencia = "";
-                        break;
-
                 }
 
                 /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
