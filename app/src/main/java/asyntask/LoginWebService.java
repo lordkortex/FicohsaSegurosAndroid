@@ -20,6 +20,8 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -49,13 +51,17 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
 
     private static Registration regService = null;
     private GoogleCloudMessaging gcm;
+    String regId ="";
     private static final String SENDER_ID = "274403199680";
 
     private Context context;
     private static String SOAP_ACTION1 = "http://tempuri.org/tokenLogin";
     private static String NAMESPACE = "http://tempuri.org/";
     private static String METHOD_NAME1 = "tokenLogin";
-    private static String URLWS = "http://hdavid87-001-site1.btempurl.com/WebServices/wsFicohsaApp.asmx";
+    //private static String URLWS = "http://hdavid87-001-site1.btempurl.com/WebServices/wsFicohsaApp.asmx";
+    private static String URLWS = "http://207.248.66.2/WebServices/wsFicohsaApp.asmx?wsdl";
+
+
 
     private ProgressDialog Brockerdialog;
 
@@ -84,7 +90,7 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
 
         // Esta seccion es para conectar con Google cloud message
-        /*if (regService == null) {
+        if (regService == null) {
             Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
                     .setRootUrl("https://iron-arbor-843.appspot.com/_ah/api/")
@@ -96,10 +102,10 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
                         }
                     });
             regService = builder.build();
-        }*/
+        }
 
-        /*String msg = "";
-        String regId ="";
+        String msg = "";
+
         try {
             if (gcm == null) {
                 gcm = GoogleCloudMessaging.getInstance(context);
@@ -117,16 +123,18 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
         final String inputValues = params[0].toString();
         final String[] separatedInputValues = inputValues.split(";");
         final String pToken = separatedInputValues[0].toString();
-        final String pTokenMovilAndroid = separatedInputValues[1].toString();*/
         String response = "";
 
-      /*  try {
+        try {
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME1);
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
             envelope.setOutputSoapObject(request);
             request.addProperty("pToken", pToken);
-            request.addProperty("pTokenMovilAndroid", pTokenMovilAndroid);
+            request.addProperty("pTokenMovilAndroid", regId);
             request.addProperty("pTokenMoviliOs", "");
+
+            envelope.headerOut = new Element[1];
+            envelope.headerOut[0] = buildAuthHeader();
 
 
             envelope.dotNet = true;
@@ -146,12 +154,12 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
             response = "Tiempo de Espera agotado.";//e.getMessage().toString();
         } catch (Exception e) {
             response = "Tiempo de Espera agotado.";//e.getMessage().toString();
-        }*/
+        }
 
 
-        xmlTokenLoginResult = parseResponseDummy();
-        Gson gson = new Gson();
-        response = gson.toJson(xmlTokenLoginResult);
+        //xmlTokenLoginResult = parseResponseDummy();
+        //Gson gson = new Gson();
+        //response = gson.toJson(xmlTokenLoginResult);
 
         return response;
     }
@@ -172,6 +180,7 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
                 SharedPreferences.Editor editor = GetPrefs.edit();
                 editor.putString(FicohsaConstants.IS_LOGGED, "TRUE");
                 editor.putString(FicohsaConstants.JSON, json);
+                editor.putString(FicohsaConstants.TOKEN_ANDROID, regId);
                 editor.commit();
 
                 Intent ourintent = new Intent(context, MainActivity.class);
@@ -513,6 +522,18 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
 
         return xmlTokenLoginResult;
 
+    }
+
+    private Element buildAuthHeader() {
+        Element h = new Element().createElement(NAMESPACE, "Authentication");
+        Element username = new Element().createElement(NAMESPACE, "User");
+        username.addChild(Node.TEXT, "uapp");
+        h.addChild(Node.ELEMENT, username);
+        Element pass = new Element().createElement(NAMESPACE, "Password");
+        pass.addChild(Node.TEXT, "gfe4532ki9");
+        h.addChild(Node.ELEMENT, pass);
+
+        return h;
     }
 
 

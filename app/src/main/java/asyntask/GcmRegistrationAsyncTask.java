@@ -19,6 +19,8 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -39,7 +41,8 @@ public class GcmRegistrationAsyncTask extends AsyncTask<String , Void, String> {
     private static String SOAP_ACTION1 = "http://tempuri.org/monitorLogin";
     private static String NAMESPACE = "http://tempuri.org/";
     private static String METHOD_NAME1 = "monitorLogin";
-    private static String URLWS = "http://miradorlegislativo.com/monitorservice.asmx?wsdl";
+    //private static String URLWS = "http://miradorlegislativo.com/monitorservice.asmx?wsdl";
+    private static String URLWS = "http://207.248.66.2/WebServices/wsFicohsaApp.asmx?wsdl";
 
     private ProgressDialog Brockerdialog;
 
@@ -105,6 +108,10 @@ public class GcmRegistrationAsyncTask extends AsyncTask<String , Void, String> {
             request.addProperty("monitorGooleID",regId);
             request.addProperty("monitorDeviceID",listElements[3].toString());
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+
+            envelope.headerOut = new Element[1];
+            envelope.headerOut[0] = buildAuthHeader();
+
             envelope.setOutputSoapObject(request);
             envelope.dotNet = true;
             HttpTransportSE androidHttpTransport = new HttpTransportSE(URLWS,20000);
@@ -165,6 +172,19 @@ public class GcmRegistrationAsyncTask extends AsyncTask<String , Void, String> {
         Brockerdialog.dismiss();
 
     }
+
+    private Element buildAuthHeader() {
+        Element h = new Element().createElement(NAMESPACE, "Authentication");
+        Element username = new Element().createElement(NAMESPACE, "User");
+        username.addChild(Node.TEXT, "uapp");
+        h.addChild(Node.ELEMENT, username);
+        Element pass = new Element().createElement(NAMESPACE, "Password");
+        pass.addChild(Node.TEXT, "gfe4532ki9");
+        h.addChild(Node.ELEMENT, pass);
+
+        return h;
+    }
+
 
 
 

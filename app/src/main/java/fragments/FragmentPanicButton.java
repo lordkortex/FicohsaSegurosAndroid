@@ -33,6 +33,7 @@ public class FragmentPanicButton extends Fragment {
     private ImageButton panicButton;
     private Activity activity;
     private XmlTokenLoginResult xmlTokenLoginResult ;
+    private String password,latitud,longitud;
 
 
 
@@ -45,6 +46,9 @@ public class FragmentPanicButton extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_panic, container, false);
+
+        latitud = getArguments().getString("latitud");
+        longitud = getArguments().getString("longitud");
 
         return rootView;
     }
@@ -71,6 +75,9 @@ public class FragmentPanicButton extends Fragment {
             xmlTokenLoginResult = gson.fromJson(br, XmlTokenLoginResult.class);
         }
 
+        if (GetPrefs.contains(FicohsaConstants.PASSWORD)) {
+            password = GetPrefs.getString(FicohsaConstants.PASSWORD, "");
+        }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,10 +118,19 @@ public class FragmentPanicButton extends Fragment {
             @Override
             public void onClick(View v) {
 
+                String tokenAndroid = "....";
+                SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+                if (GetPrefs.contains(FicohsaConstants.TOKEN_ANDROID)) {
+                    tokenAndroid = GetPrefs.getString(FicohsaConstants.TOKEN_ANDROID, "");
+                }
+
+                latitud = getArguments().getString("latitud");
+                longitud = getArguments().getString("longitud");
+
                 Intent phoneIntent = new Intent(Intent.ACTION_CALL);
                 phoneIntent.setData(Uri.parse("tel:" + xmlTokenLoginResult.getTxtTelefonoAsistencia()));
                 startActivity(phoneIntent);
-                new CrearGestionWebservice(activity).execute("abcd72015;0;0;0;android;ios");
+                new CrearGestionWebservice(activity).execute(password +";" + latitud + ";"+ longitud + ";" + tokenAndroid);
 
 
                 /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(

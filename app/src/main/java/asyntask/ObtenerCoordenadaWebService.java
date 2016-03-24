@@ -10,6 +10,8 @@ import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -35,7 +37,8 @@ public class ObtenerCoordenadaWebService extends AsyncTask<String, Void, String>
     private static String SOAP_ACTION1 = "http://tempuri.org/getLocation";
     private static String NAMESPACE = "http://tempuri.org/";
     private static String METHOD_NAME1 = "getLocation";
-    private static String URLWS = "http://hdavid87-001-site1.btempurl.com/WebServices/wsFicohsaApp.asmx";
+    //private static String URLWS = "http://hdavid87-001-site1.btempurl.com/WebServices/wsFicohsaApp.asmx";
+    private static String URLWS = "http://207.248.66.2/WebServices/wsFicohsaApp.asmx?wsdl";
 
     private ProgressDialog Brockerdialog;
 
@@ -65,6 +68,8 @@ public class ObtenerCoordenadaWebService extends AsyncTask<String, Void, String>
         try {
             SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME1);
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
+            envelope.headerOut = new Element[1];
+            envelope.headerOut[0] = buildAuthHeader();
             envelope.setOutputSoapObject(request);
             request.addProperty("pToken", pToken);
 
@@ -110,73 +115,90 @@ public class ObtenerCoordenadaWebService extends AsyncTask<String, Void, String>
 
     private XmlLocalizacionGestion parseResponse(SoapObject root) {
 
-
-        SoapObject gestiones = (SoapObject) root.getProperty("gestiones");
-        SoapObject localizacionGestion = (SoapObject) gestiones.getProperty("localizacionGestion");
-
-        String id_gestion = localizacionGestion.getProperty("id_gestion").toString();
-        String txt_tipo = localizacionGestion.getProperty("txt_tipo").toString();
-        String latitudDestino = localizacionGestion.getProperty("latitudDestino").toString();
-        String longitudDestino = localizacionGestion.getProperty("longitudDestino").toString();
-
         XmlLocalizacionGestion xmlLocalizacionGestion = new XmlLocalizacionGestion();
-        xmlLocalizacionGestion.setId_gestion(id_gestion);
-        xmlLocalizacionGestion.setLatitudDestino(latitudDestino);
-        xmlLocalizacionGestion.setLongitudDestino(longitudDestino);
-        xmlLocalizacionGestion.setTxt_tipo(txt_tipo);
+
+        if(root.hasProperty("gestiones")){
+            SoapObject gestiones = (SoapObject) root.getProperty("gestiones");
+            SoapObject localizacionGestion = (SoapObject) gestiones.getProperty("localizacionGestion");
+
+            String id_gestion = localizacionGestion.getProperty("id_gestion").toString();
+            String txt_tipo = localizacionGestion.getProperty("txt_tipo").toString();
+            String latitudDestino = localizacionGestion.getProperty("latitudDestino").toString();
+            String longitudDestino = localizacionGestion.getProperty("longitudDestino").toString();
+
+            xmlLocalizacionGestion.setId_gestion(id_gestion);
+            xmlLocalizacionGestion.setLatitudDestino(latitudDestino);
+            xmlLocalizacionGestion.setLongitudDestino(longitudDestino);
+            xmlLocalizacionGestion.setTxt_tipo(txt_tipo);
 
 
-        if(localizacionGestion.hasProperty("token")){
+            if(localizacionGestion.hasProperty("token")){
 
-            SoapObject token = (SoapObject) localizacionGestion.getProperty("token");
-            List<XmlLocalizacionToken> xmlLocalizacionTokenList = new ArrayList<XmlLocalizacionToken>();
-            xmlLocalizacionGestion.setXmlLocalizacionTokenList(xmlLocalizacionTokenList);
+                SoapObject token = (SoapObject) localizacionGestion.getProperty("token");
+                List<XmlLocalizacionToken> xmlLocalizacionTokenList = new ArrayList<XmlLocalizacionToken>();
+                xmlLocalizacionGestion.setXmlLocalizacionTokenList(xmlLocalizacionTokenList);
 
-            for (int i = 0; i < token.getPropertyCount(); i++) {
-                SoapObject item = (SoapObject) token.getProperty(i);
+                for (int i = 0; i < token.getPropertyCount(); i++) {
+                    SoapObject item = (SoapObject) token.getProperty(i);
 
-                XmlLocalizacionToken xmlLocalizacionToken = new XmlLocalizacionToken();
+                    XmlLocalizacionToken xmlLocalizacionToken = new XmlLocalizacionToken();
 
-                String txt_token = item.getProperty("txt_token").toString();
-                String txt_nombre = item.getProperty("txt_nombre").toString();
+                    String txt_token = item.getProperty("txt_token").toString();
+                    String txt_nombre = item.getProperty("txt_nombre").toString();
 
-                xmlLocalizacionToken.setTxt_nombre(txt_token);
-                xmlLocalizacionToken.setTxt_token(txt_nombre);
+                    xmlLocalizacionToken.setTxt_nombre(txt_token);
+                    xmlLocalizacionToken.setTxt_token(txt_nombre);
 
-                xmlLocalizacionTokenList.add(xmlLocalizacionToken);
-
-
-                if(item.hasProperty("puntos")){
-                    SoapObject puntos = (SoapObject) item.getProperty("puntos");
-                    List<XmlLocalizacionPuntos> xmlLocalizacionPuntosList = new ArrayList<XmlLocalizacionPuntos>();
-                    xmlLocalizacionToken.setXmlLocalizacionPuntosList(xmlLocalizacionPuntosList);
+                    xmlLocalizacionTokenList.add(xmlLocalizacionToken);
 
 
-                    for (int h = 0; h < puntos.getPropertyCount(); h++) {
-                        SoapObject cobertura = (SoapObject) puntos.getProperty(h);
+                    if(item.hasProperty("puntos")){
+                        SoapObject puntos = (SoapObject) item.getProperty("puntos");
+                        List<XmlLocalizacionPuntos> xmlLocalizacionPuntosList = new ArrayList<XmlLocalizacionPuntos>();
+                        xmlLocalizacionToken.setXmlLocalizacionPuntosList(xmlLocalizacionPuntosList);
 
-                        String latitud = cobertura.getProperty("latitud").toString();
-                        String longitud = cobertura.getProperty("longitud").toString();
 
-                        XmlLocalizacionPuntos xmlLocalizacionPuntos = new XmlLocalizacionPuntos();
+                        for (int h = 0; h < puntos.getPropertyCount(); h++) {
+                            SoapObject cobertura = (SoapObject) puntos.getProperty(h);
 
-                        xmlLocalizacionPuntos.setLatitud(latitud);
-                        xmlLocalizacionPuntos.setLongitud(longitud);
+                            String latitud = cobertura.getProperty("latitud").toString();
+                            String longitud = cobertura.getProperty("longitud").toString();
 
-                        xmlLocalizacionPuntosList.add(xmlLocalizacionPuntos);
+                            XmlLocalizacionPuntos xmlLocalizacionPuntos = new XmlLocalizacionPuntos();
+
+                            xmlLocalizacionPuntos.setLatitud(latitud);
+                            xmlLocalizacionPuntos.setLongitud(longitud);
+
+                            xmlLocalizacionPuntosList.add(xmlLocalizacionPuntos);
+
+                        }
 
                     }
-
                 }
+
             }
+
+
+            XmlContainer.xmlLocalizacionGestion = xmlLocalizacionGestion;
 
         }
 
 
-        XmlContainer.xmlLocalizacionGestion = xmlLocalizacionGestion;
-
         return xmlLocalizacionGestion;
 
     }
+
+    private Element buildAuthHeader() {
+        Element h = new Element().createElement(NAMESPACE, "Authentication");
+        Element username = new Element().createElement(NAMESPACE, "User");
+        username.addChild(Node.TEXT, "uapp");
+        h.addChild(Node.ELEMENT, username);
+        Element pass = new Element().createElement(NAMESPACE, "Password");
+        pass.addChild(Node.TEXT, "gfe4532ki9");
+        h.addChild(Node.ELEMENT, pass);
+
+        return h;
+    }
+
 
 }

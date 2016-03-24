@@ -13,6 +13,8 @@ import org.ksoap2.SoapFault12;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -33,7 +35,8 @@ public class CrearCoordenadaWebService extends AsyncTask<String , Void, String> 
     private static String SOAP_ACTION1 = "http://tempuri.org/setLocation";
     private static String NAMESPACE = "http://tempuri.org/";
     private static String METHOD_NAME1 = "setLocation";
-    private static String URLWS = "http://hdavid87-001-site1.btempurl.com/WebServices/wsFicohsaApp.asmx";
+    //private static String URLWS = "http://hdavid87-001-site1.btempurl.com/WebServices/wsFicohsaApp.asmx";
+    private static String URLWS = "http://207.248.66.2/WebServices/wsFicohsaApp.asmx?wsdl";
 
     //private ProgressDialog Brockerdialog;
 
@@ -75,6 +78,9 @@ public class CrearCoordenadaWebService extends AsyncTask<String , Void, String> 
                 //request.addProperty("coorX", coorX);
                 //request.addProperty("coorY", coorY);
 
+                envelope.headerOut = new Element[1];
+                envelope.headerOut[0] = buildAuthHeader();
+
                 request.addProperty("pToken", password);
                 request.addProperty("pIdGestion", idgestion);
                 request.addProperty("pIdAsistencia", "0");
@@ -105,6 +111,18 @@ public class CrearCoordenadaWebService extends AsyncTask<String , Void, String> 
             Toast.makeText(context, "En estos momentos tu dispositivo no tiene conexion a internet.", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    private Element buildAuthHeader() {
+        Element h = new Element().createElement(NAMESPACE, "Authentication");
+        Element username = new Element().createElement(NAMESPACE, "User");
+        username.addChild(Node.TEXT, "uapp");
+        h.addChild(Node.ELEMENT, username);
+        Element pass = new Element().createElement(NAMESPACE, "Password");
+        pass.addChild(Node.TEXT, "gfe4532ki9");
+        h.addChild(Node.ELEMENT, pass);
+
+        return h;
     }
 
 
