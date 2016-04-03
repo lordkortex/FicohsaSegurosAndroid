@@ -81,13 +81,15 @@ public class CrearCoordenadaWebService extends AsyncTask<String , Void, String> 
                 envelope.headerOut = new Element[1];
                 envelope.headerOut[0] = buildAuthHeader();
 
-                request.addProperty("pToken", password);
+                //request.addProperty("pToken", password);
                 request.addProperty("pIdGestion", idgestion);
                 request.addProperty("pIdAsistencia", "0");
                 request.addProperty("pLatitud", coorX);
                 request.addProperty("pLongitud", coorY);
+                request.addProperty("pIdEqRma", "0");
 
-                envelope.dotNet = true;
+
+                        envelope.dotNet = true;
                 HttpTransportSE androidHttpTransport = new HttpTransportSE(URLWS,20000);
                 androidHttpTransport.call(SOAP_ACTION1, envelope);
                 SoapObject result = (SoapObject)envelope.bodyIn;
@@ -108,7 +110,7 @@ public class CrearCoordenadaWebService extends AsyncTask<String , Void, String> 
     @Override
     protected void onPostExecute(String xml) {
         if(!xml.equals("")){
-            Toast.makeText(context, "En estos momentos tu dispositivo no tiene conexion a internet.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, xml, Toast.LENGTH_LONG).show();
         }
 
     }

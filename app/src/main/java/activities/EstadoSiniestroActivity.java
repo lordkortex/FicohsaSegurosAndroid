@@ -1,18 +1,28 @@
 package activities;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.google.gson.Gson;
+
 import org.w3c.dom.NodeList;
+
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.List;
 
 import adapters.AdapterEstadoSiniestro;
 import adapters.AdapterGenerico;
 import app.hn.com.ficohsaseguros.R;
 import interfaces.OnItemClickListener;
+import models.XmlSiniestros;
+import models.XmlTokenLoginResult;
 import util.XpathUtil;
 
 /**
@@ -24,6 +34,7 @@ public class EstadoSiniestroActivity extends Activity {
     private AdapterEstadoSiniestro mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private XmlTokenLoginResult xmlTokenLoginResult ;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,24 +47,20 @@ public class EstadoSiniestroActivity extends Activity {
 
         getActionBar().setTitle("Estado Siniestros");
 
-        final String xmlNotificacion1 = XpathUtil.buildXmlNotificacion("08:30", "Ficohsa Seguros le informa que la asistencia va en camino. Esperamos unos pocos minutos.");
+        SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String json = "";
+        if (GetPrefs.contains(FicohsaConstants.JSON)) {
+            json = GetPrefs.getString(FicohsaConstants.JSON, "");
+            Gson gson = new Gson();
+            BufferedReader br = new BufferedReader(new StringReader(json));
+            xmlTokenLoginResult = gson.fromJson(br, XmlTokenLoginResult.class);
+        }
 
-        final String cadena = "<NewDataSet>" +
-                xmlNotificacion1 +
-                xmlNotificacion1 +
-                xmlNotificacion1 +
-                xmlNotificacion1 +
-                xmlNotificacion1 +
-                xmlNotificacion1 +
-                xmlNotificacion1 +
-                xmlNotificacion1 +
-                xmlNotificacion1 +
-                xmlNotificacion1 +
-                "</NewDataSet>";
+        if(xmlTokenLoginResult.getXmlSiniestros() != null && !xmlTokenLoginResult.getXmlSiniestros().isEmpty()){
+            setListData(xmlTokenLoginResult.getXmlSiniestros());
+        }
 
 
-        NodeList nodeList = XpathUtil.getXptathResult(cadena, "/NewDataSet/notificacion");
-        setListData(nodeList);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -65,7 +72,7 @@ public class EstadoSiniestroActivity extends Activity {
 
     }
 
-    public void setListData(NodeList values) {
+    public void setListData(List<XmlSiniestros> values) {
         // specify an adapter (see also next example)
 
         mAdapter = new AdapterEstadoSiniestro(values);

@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class XmlLocalizacionGestion {
 
+    private String strError;
     private String id_gestion;
     private String txt_tipo;
     private String latitudDestino;
@@ -56,5 +57,13 @@ public class XmlLocalizacionGestion {
 
     public void setXmlLocalizacionTokenList(List<XmlLocalizacionToken> xmlLocalizacionTokenList) {
         this.xmlLocalizacionTokenList = xmlLocalizacionTokenList;
+    }
+
+    public String getStrError() {
+        return strError;
+    }
+
+    public void setStrError(String strError) {
+        this.strError = strError;
     }
 }

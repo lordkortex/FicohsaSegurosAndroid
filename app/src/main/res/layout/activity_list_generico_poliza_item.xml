@@ -119,5 +119,99 @@
         />
 
 
+    <TextView
+        android:id="@+id/generic_field_9"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generic_field_8"
+        android:gravity="left"
+        android:text="......"
+        android:layout_marginRight="5dip"
+        android:textSize="16dip"
+        android:visibility="visible"
+        />
+
+
+    <TextView
+        android:id="@+id/generic_field_10"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generic_field_9"
+        android:gravity="left"
+        android:text="......"
+        android:layout_marginRight="5dip"
+        android:textSize="16dip"
+        android:visibility="visible"
+        />
+
+
+    <TextView
+        android:id="@+id/generic_field_11"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generic_field_10"
+        android:gravity="left"
+        android:text="......"
+        android:layout_marginRight="5dip"
+        android:textSize="16dip"
+        android:visibility="visible"
+        />
+
+
+    <TextView
+        android:id="@+id/generic_field_12"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generic_field_11"
+        android:gravity="left"
+        android:text="......"
+        android:layout_marginRight="5dip"
+        android:textSize="16dip"
+        android:visibility="visible"
+        />
+
+
+    <TextView
+        android:id="@+id/generic_field_13"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generic_field_12"
+        android:gravity="left"
+        android:text="......"
+        android:layout_marginRight="5dip"
+        android:textSize="16dip"
+        android:visibility="visible"
+        />
+
+
+    <TextView
+        android:id="@+id/generic_field_14"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generic_field_13"
+        android:gravity="left"
+        android:text="......"
+        android:layout_marginRight="5dip"
+        android:textSize="16dip"
+        android:visibility="visible"
+        />
+
+
+    <TextView
+        android:id="@+id/generic_field_15"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/generic_field_14"
+        android:gravity="left"
+        android:text="......"
+        android:layout_marginRight="5dip"
+        android:textSize="16dip"
+        android:visibility="visible"
+        />
+
+
+
+
+
 
 </RelativeLayout>

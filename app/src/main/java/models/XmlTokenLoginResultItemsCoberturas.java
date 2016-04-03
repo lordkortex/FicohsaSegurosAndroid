@@ -13,6 +13,8 @@ public class XmlTokenLoginResultItemsCoberturas {
     private String txt_moneda;
     private String imp_suma;
     private String imp_deducible;
+    private String txt_cubre;
+    private String txt_aplicacion;
 
     public XmlTokenLoginResultItemsCoberturas(){
 
@@ -81,5 +83,21 @@ public class XmlTokenLoginResultItemsCoberturas {
 
     public void setImp_deducible(String imp_deducible) {
         this.imp_deducible = imp_deducible;
+    }
+
+    public String getTxt_cubre() {
+        return txt_cubre;
+    }
+
+    public void setTxt_cubre(String txt_cubre) {
+        this.txt_cubre = txt_cubre;
+    }
+
+    public String getTxt_aplicacion() {
+        return txt_aplicacion;
+    }
+
+    public void setTxt_aplicacion(String txt_aplicacion) {
+        this.txt_aplicacion = txt_aplicacion;
     }
 }

@@ -75,6 +75,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="activities.NotificationImageActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:parentActivityName="activities.NotificacionesActivity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="activities.PolizasActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
@@ -86,6 +96,16 @@
         </activity>
         <activity
             android:name="activities.EstadoCuentaActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:parentActivityName="activities.MainActivity"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="activities.DebitosActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:parentActivityName="activities.MainActivity"
@@ -151,9 +171,15 @@
             android:name="intentservices.RSSPullService"
             android:exported="false" />
 
-        <meta-data
+       <!-- DEBUG
+       <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCWTeLRI2KMRgohWf4QDZufZPwx9hA3AFo" />
-    </application>
+            android:value="AIzaSyCWTeLRI2KMRgohWf4QDZufZPwx9hA3AFo" />-->
 
-</manifest>
+        <!-- PORDUCCION -->
+         <meta-data
+             android:name="com.google.android.maps.v2.API_KEY"
+             android:value="AIzaSyAY4CCY7J1znblHCrI_pnbliccIW8y4B3k" />
+     </application>
+
+ </manifest>

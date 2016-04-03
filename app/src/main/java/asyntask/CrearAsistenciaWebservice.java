@@ -92,7 +92,7 @@ public class CrearAsistenciaWebservice extends AsyncTask<String , Void, String> 
             //SoapFault12 result = (SoapFault12)envelope.bodyIn;
             SoapObject root = (SoapObject) result.getProperty(0);
 
-            if(root.hasProperty("strError")){
+            if(root.hasProperty("strError")  && !root.getProperty("strError").toString().equals("anyType{}")){
                 xml = root.getProperty("strError").toString();
             }else{
                 xml = "Proceso Exitoso";

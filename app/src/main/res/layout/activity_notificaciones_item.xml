@@ -26,9 +26,8 @@
 
     <TextView
         android:id="@+id/generic_field_1"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/thumbnail"
         android:text=""
         android:textColor="#343434"
@@ -42,11 +41,23 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/thumbnail"
         android:layout_below="@id/generic_field_1"
-        android:layout_alignBottom="@+id/thumbnail"
-        android:gravity="left"
         android:text=""
         android:layout_marginRight="5dip"
         />
+
+    <TextView
+        android:id="@+id/generic_field_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_below="@id/generic_field_2"
+        android:text=""
+        android:layout_marginRight="5dip"
+        android:visibility="invisible"
+        />
+
+
+
 
 
 </RelativeLayout>

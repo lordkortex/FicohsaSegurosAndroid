@@ -15,7 +15,11 @@ public class XmlTokenLoginResultItems {
     private String txt_placa;
     private String fec_comp;
     private String sn_activo;
-    private List<XmlTokenLoginResultItemsCoberturas> xmlTokenLoginResultItemsCoberturas;
+
+    private String txt_marca;
+    private String txt_modelo;
+    private String txt_color;
+    private String aaaa_modelo;
 
 
     public XmlTokenLoginResultItems(){
@@ -87,11 +91,36 @@ public class XmlTokenLoginResultItems {
         this.sn_activo = sn_activo;
     }
 
-    public List<XmlTokenLoginResultItemsCoberturas> getXmlTokenLoginResultItemsCoberturas() {
-        return xmlTokenLoginResultItemsCoberturas;
+
+    public String getTxt_marca() {
+        return txt_marca;
     }
 
-    public void setXmlTokenLoginResultItemsCoberturas(List<XmlTokenLoginResultItemsCoberturas> xmlTokenLoginResultItemsCoberturas) {
-        this.xmlTokenLoginResultItemsCoberturas = xmlTokenLoginResultItemsCoberturas;
+    public void setTxt_marca(String txt_marca) {
+        this.txt_marca = txt_marca;
+    }
+
+    public String getTxt_modelo() {
+        return txt_modelo;
+    }
+
+    public void setTxt_modelo(String txt_modelo) {
+        this.txt_modelo = txt_modelo;
+    }
+
+    public String getTxt_color() {
+        return txt_color;
+    }
+
+    public void setTxt_color(String txt_color) {
+        this.txt_color = txt_color;
+    }
+
+    public String getAaaa_modelo() {
+        return aaaa_modelo;
+    }
+
+    public void setAaaa_modelo(String aaaa_modelo) {
+        this.aaaa_modelo = aaaa_modelo;
     }
 }

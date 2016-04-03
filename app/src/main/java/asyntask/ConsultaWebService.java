@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import activities.DebitosActivity;
 import activities.EstadoCuentaActivity;
 import activities.EstadoSiniestroActivity;
 import activities.FicohsaConstants;
@@ -40,7 +41,10 @@ import activities.LoginActivity;
 import activities.MainActivity;
 import activities.PolizasActivity;
 import app.hn.com.ficohsaseguros.R;
+import models.XmlDebitos;
+import models.XmlEstadoCuenta;
 import models.XmlMotivos;
+import models.XmlSiniestros;
 import models.XmlTokenLoginGestiones;
 import models.XmlTokenLoginResult;
 import models.XmlTokenLoginResultItems;
@@ -92,37 +96,6 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
 
-        // Esta seccion es para conectar con Google cloud message
-        if (regService == null) {
-            Registration.Builder builder = new Registration.Builder(AndroidHttp.newCompatibleTransport(),
-                    new AndroidJsonFactory(), null)
-                    .setRootUrl("https://iron-arbor-843.appspot.com/_ah/api/")
-                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                        @Override
-                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest)
-                                throws IOException {
-                            abstractGoogleClientRequest.setDisableGZipContent(true);
-                        }
-                    });
-            regService = builder.build();
-        }
-
-        String msg = "";
-
-        try {
-            if (gcm == null) {
-                gcm = GoogleCloudMessaging.getInstance(context);
-            }
-            regId = gcm.register(SENDER_ID);
-            msg = "Device registered, registration ID=" + regId;
-
-            regService.register(regId).execute();
-
-        } catch (IOException ex) {
-            msg = "Error: " + ex.getMessage();
-            Logger.getLogger("REGISTRATION").log(Level.INFO, msg);
-        }
-
         final String inputValues = params[0].toString();
         final String[] separatedInputValues = inputValues.split(";");
         final String pToken = separatedInputValues[0].toString();
@@ -134,8 +107,8 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER12);
             envelope.setOutputSoapObject(request);
             request.addProperty("pToken", pToken);
-            request.addProperty("pTokenMovilAndroid", regId);
-            request.addProperty("pTokenMoviliOs", "");
+            //request.addProperty("pTokenMovilAndroid", regId);
+            //request.addProperty("pTokenMoviliOs", "");
 
             envelope.headerOut = new Element[1];
             envelope.headerOut[0] = buildAuthHeader();
@@ -150,7 +123,25 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
             xmlLocalizacionGestionList = xmlTokenLoginResult.getXmlTokenLoginGestionesList();
 
             Gson gson = new Gson();
-            response = gson.toJson(xmlTokenLoginResult);
+            String jsonResponse = gson.toJson(xmlTokenLoginResult);
+
+
+            if(xmlTokenLoginResult.getStrError() != null){
+                if( !xmlTokenLoginResult.getStrError().equals("")){
+                    response = xmlTokenLoginResult.getStrError();
+                }else{
+                    SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                    SharedPreferences.Editor editor = GetPrefs.edit();
+                    editor.putString(FicohsaConstants.JSON, jsonResponse);
+                    editor.commit();
+                }
+            }else{
+                SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = GetPrefs.edit();
+                editor.putString(FicohsaConstants.JSON, jsonResponse);
+                editor.commit();
+            }
+
 
         } catch (IOException e) {
             response = "Tiempo de Espera agotado.";//e.getMessage().toString();
@@ -160,42 +151,14 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
             response = "Tiempo de Espera agotado.";//e.getMessage().toString();
         }
 
-
-        //xmlTokenLoginResult = parseResponseDummy();
-        //Gson gson = new Gson();
-        //response = gson.toJson(xmlTokenLoginResult);
-
         return response;
     }
 
     @Override
-    protected void onPostExecute(String json) {
+    protected void onPostExecute(String response) {
 
-        //
-        //if(xmlTokenLoginResult == null ){
-            //Toast.makeText(context, "En estos momentos tu dispositivo no tiene conexion a internet.", Toast.LENGTH_LONG).show();
 
-        //}else{
-            //if(xmlTokenLoginResult.getXmlTokenLoginGestionesList() == null  && xmlTokenLoginResult.getXmlTokenLoginResultItemsList()==null ){
-            //    Toast.makeText(context, "Autenticacion incorrecta.", Toast.LENGTH_LONG).show();
-            //}else{
-        Boolean isLoggedIn = false;
-
-                if(xmlTokenLoginResult.getStrError() != null){
-                    if( xmlTokenLoginResult.getStrError().equals("")){
-                        isLoggedIn = true;
-                     }else{
-                        Toast.makeText(context, xmlTokenLoginResult.getStrError(), Toast.LENGTH_LONG).show();
-                    }
-                }else{
-                    isLoggedIn = true;
-                }
-
-        if(isLoggedIn){
-            SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-            SharedPreferences.Editor editor = GetPrefs.edit();
-            editor.putString(FicohsaConstants.JSON, json);
-            editor.commit();
+        if(response.equals("")){
 
             switch (pActivityToCall) {
                 case "0":
@@ -211,16 +174,20 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
                     Intent ourintentEstadoSiniestro = new Intent(context, EstadoSiniestroActivity.class);
                     this.context.startActivity(ourintentEstadoSiniestro);
                     break;
+                case "3":
+                    Intent ourintentDebitos = new Intent(context, DebitosActivity.class);
+                    this.context.startActivity(ourintentDebitos);
+                    break;
 
             }
 
 
 
+        }else{
+            Toast.makeText(context,response, Toast.LENGTH_LONG).show();
+
         }
 
-
-            //}
-       //}
 
         Brockerdialog.setCancelable(true);
         Brockerdialog.dismiss();
@@ -260,7 +227,7 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
                 String fec_vig_hasta = root.getProperty("fec_vig_hasta").toString();
                 String saldo_total = root.getProperty("saldo_total").toString();
                 String saldo_vencido = root.getProperty("saldo_vencido").toString();
-                String txt_moneda = root.getProperty("txt_moneda").toString();
+                //String txt_moneda = root.getProperty("txt_moneda").toString();
 
                 xmlTokenLoginResult.setAnio_pol(anio_pol);
                 xmlTokenLoginResult.setNro_pol(nro_pol);
@@ -302,6 +269,11 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
                         xmlTokenLoginResultItems.setTxt_chasis(txt_chasis);
                         xmlTokenLoginResultItems.setTxt_motor(txt_motor);
                         xmlTokenLoginResultItems.setTxt_placa(txt_placa);
+
+                        xmlTokenLoginResultItems.setTxt_marca(txt_marca);
+                        xmlTokenLoginResultItems.setTxt_modelo(txt_modelo);
+                        xmlTokenLoginResultItems.setTxt_color(txt_color);
+                        xmlTokenLoginResultItems.setAaaa_modelo(aaaa_modelo);
                         //xmlTokenLoginResultItems.setSn_activo(sn_activo);
                         //xmlTokenLoginResultItems.setFec_comp(fec_comp);
 
@@ -311,36 +283,160 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
                         if(item.hasProperty("coberturas")){
                             SoapObject coberturas = (SoapObject) item.getProperty("coberturas");
                             List<XmlTokenLoginResultItemsCoberturas> xmlTokenLoginResultItemsCoberturasList = new ArrayList<XmlTokenLoginResultItemsCoberturas>();
-                            xmlTokenLoginResultItems.setXmlTokenLoginResultItemsCoberturas(xmlTokenLoginResultItemsCoberturasList);
+                            xmlTokenLoginResult.setXmlTokenLoginResultItemsCoberturas(xmlTokenLoginResultItemsCoberturasList);
 
 
                             for (int h = 0; h < coberturas.getPropertyCount(); h++) {
                                 SoapObject cobertura = (SoapObject) coberturas.getProperty(h);
 
+                                /*String cod_cobertura = cobertura.getProperty("cod_cobertura").toString();
+                                String txt_desc = cobertura.getProperty("txt_desc").toString();
+                                String txt_desc_corta = cobertura.getProperty("txt_desc_corta").toString();
+                                String txt_suma = "";//cobertura.getProperty("txt_suma").toString();
+                                String txt_deducible = cobertura.getProperty("txt_deducible").toString();
+                                String txt_moneda = cobertura.getProperty("txt_moneda").toString();
+                                String imp_suma = "";//cobertura.getProperty("imp_suma").toString();
+                                String imp_deducible = cobertura.getProperty("imp_deducible").toString();*/
+
                                 String cod_cobertura = cobertura.getProperty("cod_cobertura").toString();
                                 String txt_desc = cobertura.getProperty("txt_desc").toString();
                                 String txt_desc_corta = cobertura.getProperty("txt_desc_corta").toString();
-                                String txt_suma = cobertura.getProperty("txt_suma").toString();
-                                String txt_deducible = cobertura.getProperty("txt_deducible").toString();
-                                //String txt_moneda = cobertura.getProperty("txt_moneda").toString();
-                                String imp_suma = cobertura.getProperty("imp_suma").toString();
+                                String txt_cubre = cobertura.getProperty("txt_cubre").toString();
                                 String imp_deducible = cobertura.getProperty("imp_deducible").toString();
+                                String txt_tipo_deducible = cobertura.getProperty("txt_tipo_deducible").toString();
+                                String txt_aplicacion = cobertura.getProperty("txt_aplicacion").toString();
+                                String txt_moneda = cobertura.getProperty("txt_moneda").toString();
+
+
 
                                 XmlTokenLoginResultItemsCoberturas xmlTokenLoginResultItemsCoberturas = new XmlTokenLoginResultItemsCoberturas();
 
                                 xmlTokenLoginResultItemsCoberturas.setCod_cobertura(cod_cobertura);
                                 xmlTokenLoginResultItemsCoberturas.setTxt_desc(txt_desc);
                                 xmlTokenLoginResultItemsCoberturas.setTxt_desc_corta(txt_desc_corta);
-                                xmlTokenLoginResultItemsCoberturas.setTxt_suma(txt_suma);
-                                xmlTokenLoginResultItemsCoberturas.setTxt_deducible(txt_deducible);
+                                xmlTokenLoginResultItemsCoberturas.setTxt_suma("");
+                                xmlTokenLoginResultItemsCoberturas.setTxt_deducible(txt_tipo_deducible);
                                 xmlTokenLoginResultItemsCoberturas.setTxt_moneda(txt_moneda);
                                 xmlTokenLoginResultItemsCoberturas.setImp_deducible(imp_deducible);
-                                xmlTokenLoginResultItemsCoberturas.setImp_suma(imp_suma);
+                                xmlTokenLoginResultItemsCoberturas.setImp_suma("");
+                                xmlTokenLoginResultItemsCoberturas.setTxt_aplicacion(txt_aplicacion);
+                                xmlTokenLoginResultItemsCoberturas.setTxt_cubre(txt_cubre);
                                 xmlTokenLoginResultItemsCoberturasList.add(xmlTokenLoginResultItemsCoberturas);
 
                             }
 
                         }
+
+
+
+                        if(root.hasProperty("estCuenta")){
+                            SoapObject estadoCuentas = (SoapObject) root.getProperty("estCuenta");
+                            List<XmlEstadoCuenta> xmlEstadoCuentas = new ArrayList<XmlEstadoCuenta>();
+                            xmlTokenLoginResult.setXmlEstadoCuentas(xmlEstadoCuentas);
+
+
+                            for (int h = 0; h < estadoCuentas.getPropertyCount(); h++) {
+                                SoapObject estadoCuentasProperty = (SoapObject) estadoCuentas.getProperty(h);
+
+                                String nro_cuota = estadoCuentasProperty.getProperty("nro_cuota").toString();
+                                String nro_comprobante = estadoCuentasProperty.getProperty("nro_comprobante").toString();
+                                String fecha_vencimiento = estadoCuentasProperty.getProperty("fecha_vencimiento").toString();
+                                String imp_prima_total = estadoCuentasProperty.getProperty("imp_prima_total").toString();
+                                String fecha_proceso = estadoCuentasProperty.getProperty("fecha_proceso").toString();
+                                String txt_estado = estadoCuentasProperty.getProperty("txt_estado").toString();
+                                String imp_prima_deposito = estadoCuentasProperty.getProperty("imp_prima_deposito").toString();
+                                String imp_prima_pagada = estadoCuentasProperty.getProperty("imp_prima_pagada").toString();
+                                String txt_moneda = estadoCuentasProperty.getProperty("txt_moneda").toString();
+                                String fecha_cobranza = estadoCuentasProperty.getProperty("fecha_cobranza").toString();
+
+                                XmlEstadoCuenta xmlTokenLoginResultItemsEstadoCuentas = new XmlEstadoCuenta();
+
+                                xmlTokenLoginResultItemsEstadoCuentas.setNro_cuota(nro_cuota);
+                                xmlTokenLoginResultItemsEstadoCuentas.setNro_comprobante(nro_comprobante);
+                                xmlTokenLoginResultItemsEstadoCuentas.setFecha_vencimiento(fecha_vencimiento);
+                                xmlTokenLoginResultItemsEstadoCuentas.setImp_prima_total(imp_prima_total);
+                                xmlTokenLoginResultItemsEstadoCuentas.setFecha_proceso(fecha_proceso);
+                                xmlTokenLoginResultItemsEstadoCuentas.setTxt_estado(txt_estado);
+                                xmlTokenLoginResultItemsEstadoCuentas.setImp_prima_deposito(imp_prima_deposito);
+                                xmlTokenLoginResultItemsEstadoCuentas.setImp_prima_pagada(imp_prima_pagada);
+                                xmlTokenLoginResultItemsEstadoCuentas.setTxt_moneda(txt_moneda);
+                                xmlTokenLoginResultItemsEstadoCuentas.setFecha_cobranza(fecha_cobranza);
+                                xmlEstadoCuentas.add(xmlTokenLoginResultItemsEstadoCuentas);
+
+                            }
+
+                        }
+
+
+                        if(root.hasProperty("debitos")){
+                            SoapObject debitos = (SoapObject) root.getProperty("debitos");
+                            List<XmlDebitos> xmlDebitos= new ArrayList<XmlDebitos>();
+                            xmlTokenLoginResult.setXmlDebitos(xmlDebitos);
+
+
+                            for (int h = 0; h < debitos.getPropertyCount(); h++) {
+                                SoapObject debitosProperty = (SoapObject) debitos.getProperty(h);
+
+                                String nro_cta_tarj = debitosProperty.getProperty("nro_cta_tarj").toString();
+                                String nro_cuota = debitosProperty.getProperty("nro_cuota").toString();
+                                String nro_comprobante = debitosProperty.getProperty("nro_comprobante").toString();
+                                String fecha_generado = debitosProperty.getProperty("fecha_generado").toString();
+                                String prima_total = debitosProperty.getProperty("prima_total").toString();
+                                String prima_pagada = debitosProperty.getProperty("prima_pagada").toString();
+                                String prima_vencida = debitosProperty.getProperty("prima_vencida").toString();
+                                String txt_estado_intento = debitosProperty.getProperty("txt_estado_intento").toString();
+
+                                XmlDebitos xmlTokenLoginResultItemsDebitos = new XmlDebitos();
+
+                                xmlTokenLoginResultItemsDebitos.setNro_cuota(nro_cuota);
+                                xmlTokenLoginResultItemsDebitos.setNro_comprobante(nro_comprobante);
+                                xmlTokenLoginResultItemsDebitos.setNro_cta_tarj(nro_cta_tarj);
+                                xmlTokenLoginResultItemsDebitos.setFecha_generado(fecha_generado);
+                                xmlTokenLoginResultItemsDebitos.setPrima_total(prima_total);
+                                xmlTokenLoginResultItemsDebitos.setPrima_pagada(prima_pagada);
+                                xmlTokenLoginResultItemsDebitos.setPrima_vencida(prima_vencida);
+                                xmlTokenLoginResultItemsDebitos.setTxt_estado_intento(txt_estado_intento);
+                                xmlDebitos.add(xmlTokenLoginResultItemsDebitos);
+
+                            }
+
+                        }
+
+
+                        if(root.hasProperty("siniestros")){
+                            SoapObject siniestros = (SoapObject) root.getProperty("siniestros");
+                            List<XmlSiniestros> xmlSiniestros = new ArrayList<XmlSiniestros>();
+                            xmlTokenLoginResult.setXmlSiniestros(xmlSiniestros);
+
+
+                            for (int h = 0; h < siniestros.getPropertyCount(); h++) {
+                                SoapObject siniestrosProperty = (SoapObject) siniestros.getProperty(h);
+
+
+
+                                String nro_siniestro = siniestrosProperty.getProperty("nro_siniestro").toString();
+                                String stxt_suc = siniestrosProperty.getProperty("txt_suc").toString();
+                                String stxt_ramo = siniestrosProperty.getProperty("txt_ramo").toString();
+                                String snro_pol = siniestrosProperty.getProperty("nro_pol").toString();
+                                String scod_contratante = siniestrosProperty.getProperty("cod_contratante").toString();
+                                String stxt_contratante = siniestrosProperty.getProperty("txt_contratante").toString();
+                                String stxt_coberturas = siniestrosProperty.getProperty("txt_coberturas").toString();
+
+                                XmlSiniestros xmlSiniestrosItem = new XmlSiniestros();
+
+                                xmlSiniestrosItem.setNro_siniestro(nro_siniestro);
+                                xmlSiniestrosItem.setTxt_suc(stxt_suc);
+                                xmlSiniestrosItem.setTxt_ramo(stxt_ramo);
+                                xmlSiniestrosItem.setNro_pol(snro_pol);
+                                xmlSiniestrosItem.setCod_contratante(scod_contratante);
+                                xmlSiniestrosItem.setTxt_contratante(stxt_contratante);
+                                xmlSiniestrosItem.setTxt_coberturas(stxt_coberturas);
+                                xmlSiniestros.add(xmlSiniestrosItem);
+
+                            }
+
+                        }
+
                     }
 
                 }

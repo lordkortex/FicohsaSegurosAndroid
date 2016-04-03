@@ -16,11 +16,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import org.w3c.dom.NodeList;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.List;
+
+import activities.FicohsaConstants;
+import adapters.AdapterDebitos;
 import adapters.AdapterGenerico;
+import adapters.AdapterNotificaciones;
 import app.hn.com.ficohsaseguros.R;
 import interfaces.OnItemClickListener;
+import models.XmlNotificaciones;
+import models.XmlTokenLoginResult;
 import util.XpathUtil;
 
 /**
@@ -29,10 +40,10 @@ import util.XpathUtil;
 public class FragmentNotificaciones extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private AdapterGenerico mAdapter;
+    private AdapterNotificaciones mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
-
+    private XmlTokenLoginResult xmlTokenLoginResult ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,42 +65,32 @@ public class FragmentNotificaciones extends Fragment {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        getActivity().getActionBar().setTitle("Notificaciones");
-        final String xmlNotificacion = XpathUtil.buildXmlNotificacion("mensaje", "hora");
-        NodeList nodeList = XpathUtil.getXptathResult(xmlNotificacion, "/NewDataSet/notificacion");
-        setListData(nodeList);
+        getActivity().getActionBar().setTitle("Debitos");
 
-        /*swipeRefreshLayout = (SwipeRefreshLayout) getActivity().findViewById(R.id.swipe_container);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(Boolean.FALSE);
-            }
-        });*/
+        SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());
+        String json = "";
+        if (GetPrefs.contains(FicohsaConstants.JSON)) {
+            json = GetPrefs.getString(FicohsaConstants.JSON, "");
+            Gson gson = new Gson();
+            BufferedReader br = new BufferedReader(new StringReader(json));
+            xmlTokenLoginResult = gson.fromJson(br, XmlTokenLoginResult.class);
+        }
+
+        if(xmlTokenLoginResult.getXmlNotificaciones() != null && !xmlTokenLoginResult.getXmlNotificaciones().isEmpty()){
+            setListData(xmlTokenLoginResult.getXmlNotificaciones());
+        }
 
     }
 
-    public void setListData(NodeList values) {
+    public void setListData(List<XmlNotificaciones> values) {
         // specify an adapter (see also next example)
 
-        mAdapter = new AdapterGenerico(values);
+        mAdapter = new AdapterNotificaciones(values);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.SetOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
-                final String generic_field_1 = ((TextView) view.findViewById(R.id.generic_field_1)).getText().toString();
-                final String generic_field_2 = ((TextView) view.findViewById(R.id.generic_field_2)).getText().toString();
-                final String generic_field_3 = ((TextView) view.findViewById(R.id.generic_field_3)).getText().toString();
-                final String generic_field_4 = ((TextView) view.findViewById(R.id.generic_field_4)).getText().toString();
-                final String generic_field_5 = ((TextView) view.findViewById(R.id.generic_field_5)).getText().toString();
-
-                Bundle bundleProyecto = new Bundle();
-                bundleProyecto.putString("FIELD_PARTIDO_NOMBRE", generic_field_1);
-                bundleProyecto.putString("FIELD_PARTIDO_DESC", generic_field_2);
-                bundleProyecto.putString("FIELD_DESC_CORTA", generic_field_3);
-                bundleProyecto.putString("FIELD_DESC_LARGA", generic_field_4);
-                bundleProyecto.putString("FIELD_IMAGEN", generic_field_5);
 
 
             }

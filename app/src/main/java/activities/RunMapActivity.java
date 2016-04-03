@@ -127,7 +127,7 @@ public class RunMapActivity extends Activity {
                 Intent startServiceIntent = new Intent(getBaseContext(), RSSPullService.class);
                 PendingIntent startWebServicePendingIntent = PendingIntent.getService(getBaseContext(), 1111, startServiceIntent, 0);
                 AlarmManager alarmManager = (AlarmManager) getBaseContext().getSystemService(Context.ALARM_SERVICE);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 4000, startWebServicePendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000, startWebServicePendingIntent);
                 Toast.makeText(activity, "Servicio iniciado", Toast.LENGTH_LONG).show();
                 ;
             }

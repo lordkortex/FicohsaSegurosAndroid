@@ -167,15 +167,7 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String json) {
 
-        //
-        //if(xmlTokenLoginResult == null ){
-            //Toast.makeText(context, "En estos momentos tu dispositivo no tiene conexion a internet.", Toast.LENGTH_LONG).show();
-
-        //}else{
-            //if(xmlTokenLoginResult.getXmlTokenLoginGestionesList() == null  && xmlTokenLoginResult.getXmlTokenLoginResultItemsList()==null ){
-            //    Toast.makeText(context, "Autenticacion incorrecta.", Toast.LENGTH_LONG).show();
-            //}else{
-        Boolean isLoggedIn = false;
+         Boolean isLoggedIn = false;
 
                 if(xmlTokenLoginResult.getStrError() != null){
                     if( xmlTokenLoginResult.getStrError().equals("")){
@@ -201,9 +193,6 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
 
         }
 
-
-            //}
-       //}
 
         Brockerdialog.setCancelable(true);
         Brockerdialog.dismiss();
@@ -281,7 +270,7 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
                         if(item.hasProperty("coberturas")){
                             SoapObject coberturas = (SoapObject) item.getProperty("coberturas");
                             List<XmlTokenLoginResultItemsCoberturas> xmlTokenLoginResultItemsCoberturasList = new ArrayList<XmlTokenLoginResultItemsCoberturas>();
-                            xmlTokenLoginResultItems.setXmlTokenLoginResultItemsCoberturas(xmlTokenLoginResultItemsCoberturasList);
+                            xmlTokenLoginResult.setXmlTokenLoginResultItemsCoberturas(xmlTokenLoginResultItemsCoberturasList);
 
 
                             for (int h = 0; h < coberturas.getPropertyCount(); h++) {

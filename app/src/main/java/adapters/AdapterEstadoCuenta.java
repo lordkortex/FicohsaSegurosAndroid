@@ -15,9 +15,12 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import app.hn.com.ficohsaseguros.R;
 import interfaces.OnItemClickListener;
+import models.XmlEstadoCuenta;
+import models.XmlTokenLoginGestiones;
 
 
 /**
@@ -25,8 +28,8 @@ import interfaces.OnItemClickListener;
  */
 public class AdapterEstadoCuenta extends RecyclerView.Adapter<AdapterEstadoCuenta.ViewHolder> {
 
-    private NodeList mDataset;
-    private NodeList mDatasetOriginal;
+    private List<XmlEstadoCuenta> mDataset;
+    private List<XmlEstadoCuenta>  mDatasetOriginal;
 
     private ArrayList<HashMap<String, String>> data;
     private ArrayList<HashMap<String, String>> originaldata;
@@ -37,6 +40,7 @@ public class AdapterEstadoCuenta extends RecyclerView.Adapter<AdapterEstadoCuent
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView generic_field_id, generic_field_1, generic_field_2, generic_field_3, generic_field_4,generic_field_5;
+        private TextView generic_field_6, generic_field_7, generic_field_8, generic_field_9,generic_field_10;
         public ImageView imageView;
 
 
@@ -48,7 +52,12 @@ public class AdapterEstadoCuenta extends RecyclerView.Adapter<AdapterEstadoCuent
             generic_field_2 = (TextView) v.findViewById(R.id.generic_field_2);
             generic_field_3 = (TextView) v.findViewById(R.id.generic_field_3);
             generic_field_4 = (TextView) v.findViewById(R.id.generic_field_4);
-            generic_field_5= (TextView) v.findViewById(R.id.generic_field_5);
+            generic_field_5 = (TextView) v.findViewById(R.id.generic_field_5);
+            generic_field_6 = (TextView) v.findViewById(R.id.generic_field_6);
+            generic_field_7 = (TextView) v.findViewById(R.id.generic_field_7);
+            generic_field_8 = (TextView) v.findViewById(R.id.generic_field_8);
+            generic_field_9 = (TextView) v.findViewById(R.id.generic_field_9);
+            generic_field_10= (TextView) v.findViewById(R.id.generic_field_10);
             imageView = (ImageView) v.findViewById(R.id.generic_image);
             v.setOnClickListener(this);
         }
@@ -64,7 +73,7 @@ public class AdapterEstadoCuenta extends RecyclerView.Adapter<AdapterEstadoCuent
     }
 
 
-    public AdapterEstadoCuenta(NodeList myDataset) {
+    public AdapterEstadoCuenta(List<XmlEstadoCuenta> myDataset) {
         mDataset = myDataset;
         mDatasetOriginal = myDataset;
     }
@@ -72,7 +81,7 @@ public class AdapterEstadoCuenta extends RecyclerView.Adapter<AdapterEstadoCuent
     @Override
     public AdapterEstadoCuenta.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_generico_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_generico_item_estado_cuenta, parent, false);
         ViewHolder vh = new ViewHolder(v);
         context = parent.getContext();
         return vh;
@@ -80,46 +89,41 @@ public class AdapterEstadoCuenta extends RecyclerView.Adapter<AdapterEstadoCuent
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Node node = mDataset.item(position);
-        NodeList venueChildNodes = node.getChildNodes();
+        XmlEstadoCuenta node = mDataset.get(position);
 
-        int cantidadTotal = venueChildNodes.getLength();
+        //int cantidadTotal = mDataset.size();
 
-        String generic_field_1 = "";
-        String generic_field_2 = "";
+        String nro_cuota = node.getNro_cuota();
+        String nro_comprobante = node.getNro_comprobante();
+        String fecha_vencimiento = node.getFecha_vencimiento();
+        String imp_prima_total = node.getImp_prima_total();
+        String fecha_proceso = node.getFecha_proceso();
+        String txt_estado = node.getTxt_estado();
+        String imp_prima_deposito = node.getImp_prima_deposito();
+        String imp_prima_pagada = node.getImp_prima_pagada();
+        String txt_moneda = node.getTxt_moneda();
+        String fecha_cobranza = node.getFecha_cobranza();
 
-        for (int i = 0; i < cantidadTotal; i++) {
-
-            Node nodeItem = venueChildNodes.item(i).getChildNodes().item(0);
-            if (nodeItem != null){
-                switch (i) {
-                    case 0:
-                        generic_field_1 = nodeItem.getNodeValue();
-                        break;
-                    case 1:
-                        generic_field_2 = nodeItem.getNodeValue();
-                        break;
-                }
-            }
-
-        }
-
-        holder.generic_field_1.setText("Numero de Cuota : 01");
-        holder.generic_field_2.setText("Numero de Recibo : #4444444");
-        holder.generic_field_3.setText("Fecha Vencimiento : 10/10/2016");
-        holder.generic_field_4.setText("Prima Total : 2,700.00 Lps");
-        holder.generic_field_5.setText("Estado de la Cuota : Activa");
-
+        holder.generic_field_1.setText("Numero de Cuota : ".concat(nro_cuota));
+        holder.generic_field_2.setText("Numero de Recibo : ".concat(nro_comprobante));
+        holder.generic_field_3.setText("Fecha Vencimiento : ".concat(fecha_vencimiento));
+        holder.generic_field_4.setText("Prima Total : ".concat(imp_prima_total));
+        holder.generic_field_5.setText("Fecha Proceso : ".concat(fecha_proceso));
+        holder.generic_field_6.setText("Estado : ".concat(txt_estado));
+        holder.generic_field_7.setText("Prima Deposito : ".concat(imp_prima_deposito));
+        holder.generic_field_8.setText("Prima Pagada : ".concat(imp_prima_pagada));
+        holder.generic_field_9.setText("Moneda : ".concat(txt_moneda));
+        holder.generic_field_10.setText("Fecha Cobranza : ".concat(fecha_cobranza));
 
 
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.getLength();
+        return mDataset.size();
     }
 
-    public void getFirstFilter(NodeList newValues){
+    public void getFirstFilter(List<XmlEstadoCuenta> newValues){
         mDataset = newValues;
         getFilter().filter("");
     }
@@ -138,9 +142,9 @@ public class AdapterEstadoCuenta extends RecyclerView.Adapter<AdapterEstadoCuent
             protected FilterResults performFiltering(CharSequence constraint) {
 
                 FilterResults results = new FilterResults();
-                NodeList filteredArrayNames = mDataset;
+                List<XmlEstadoCuenta> filteredArrayNames = mDataset;
 
-                results.count = filteredArrayNames.getLength();
+                results.count = filteredArrayNames.size();
                 results.values = filteredArrayNames;
                 return results;
             }

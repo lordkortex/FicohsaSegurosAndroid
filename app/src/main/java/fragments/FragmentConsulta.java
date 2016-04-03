@@ -67,6 +67,7 @@ public class FragmentConsulta  extends Fragment {
         gridArray.add(new MenuItem(Poliza, "Poliza"));
         gridArray.add(new MenuItem(EstadoCuenta, "Estado de Cuenta"));
         gridArray.add(new MenuItem(EstadoSiniestro, "Estado de Tramites"));
+        gridArray.add(new MenuItem(EstadoCuenta, "Debitos"));
 
 
         gridView = (GridView) getActivity().findViewById(R.id.gridView1);
@@ -97,6 +98,9 @@ public class FragmentConsulta  extends Fragment {
                         break;
                     case 2:
                         new ConsultaWebService(activity).execute(password + ";2");
+                        break;
+                    case 3:
+                        new ConsultaWebService(activity).execute(password + ";3");
                         break;
                 }
 

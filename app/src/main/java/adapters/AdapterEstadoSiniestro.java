@@ -2,6 +2,7 @@ package adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,11 @@ import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import app.hn.com.ficohsaseguros.R;
 import interfaces.OnItemClickListener;
+import models.XmlSiniestros;
 
 
 /**
@@ -24,8 +27,8 @@ import interfaces.OnItemClickListener;
  */
 public class AdapterEstadoSiniestro extends RecyclerView.Adapter<AdapterEstadoSiniestro.ViewHolder> {
 
-    private NodeList mDataset;
-    private NodeList mDatasetOriginal;
+    private List<XmlSiniestros> mDataset;
+    private List<XmlSiniestros>  mDatasetOriginal;
 
     private ArrayList<HashMap<String, String>> data;
     private ArrayList<HashMap<String, String>> originaldata;
@@ -63,7 +66,7 @@ public class AdapterEstadoSiniestro extends RecyclerView.Adapter<AdapterEstadoSi
     }
 
 
-    public AdapterEstadoSiniestro(NodeList myDataset) {
+    public AdapterEstadoSiniestro(List<XmlSiniestros>  myDataset) {
         mDataset = myDataset;
         mDatasetOriginal = myDataset;
     }
@@ -79,35 +82,14 @@ public class AdapterEstadoSiniestro extends RecyclerView.Adapter<AdapterEstadoSi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Node node = mDataset.item(position);
-        NodeList venueChildNodes = node.getChildNodes();
+        XmlSiniestros node = mDataset.get(position);
 
-        int cantidadTotal = venueChildNodes.getLength();
 
-        String generic_field_1 = "";
-        String generic_field_2 = "";
-
-        for (int i = 0; i < cantidadTotal; i++) {
-
-            Node nodeItem = venueChildNodes.item(i).getChildNodes().item(0);
-            if (nodeItem != null){
-                switch (i) {
-                    case 0:
-                        generic_field_1 = nodeItem.getNodeValue();
-                        break;
-                    case 1:
-                        generic_field_2 = nodeItem.getNodeValue();
-                        break;
-                }
-            }
-
-        }
-
-        holder.generic_field_1.setText("Numero de Siniestro : 01");
-        holder.generic_field_2.setText("Sucursal : SPS");
-        holder.generic_field_3.setText("Ramo : Autos");
-        holder.generic_field_4.setText("Poliza : 0000001");
-        holder.generic_field_5.setText("Contratante: ABC Contratantes");
+        holder.generic_field_1.setText("Numero de Siniestro : ".concat(node.getNro_siniestro()));
+        holder.generic_field_2.setText("Sucursal : ".concat(node.getTxt_suc()));
+        holder.generic_field_3.setText("Ramo : ".concat(node.getTxt_ramo()));
+        holder.generic_field_4.setText("Poliza : ".concat(node.getNro_pol()));
+        holder.generic_field_5.setText("Contratante: ".concat(node.getTxt_contratante()));
 
 
 
@@ -115,10 +97,10 @@ public class AdapterEstadoSiniestro extends RecyclerView.Adapter<AdapterEstadoSi
 
     @Override
     public int getItemCount() {
-        return mDataset.getLength();
+        return mDataset.size();
     }
 
-    public void getFirstFilter(NodeList newValues){
+    public void getFirstFilter(List<XmlSiniestros>  newValues){
         mDataset = newValues;
         getFilter().filter("");
     }
@@ -137,9 +119,9 @@ public class AdapterEstadoSiniestro extends RecyclerView.Adapter<AdapterEstadoSi
             protected FilterResults performFiltering(CharSequence constraint) {
 
                 FilterResults results = new FilterResults();
-                NodeList filteredArrayNames = mDataset;
+                List<XmlSiniestros>  filteredArrayNames = mDataset;
 
-                results.count = filteredArrayNames.getLength();
+                results.count = filteredArrayNames.size();
                 results.values = filteredArrayNames;
                 return results;
             }

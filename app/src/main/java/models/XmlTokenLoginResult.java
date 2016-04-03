@@ -21,6 +21,14 @@ public class XmlTokenLoginResult {
     private List<XmlTokenLoginResultItems> xmlTokenLoginResultItemsList;
     private List<XmlTokenLoginGestiones> xmlTokenLoginGestionesList;
     private List<XmlMotivos> xmlMotivosList;
+    private List<XmlTokenLoginResultItemsCoberturas> xmlTokenLoginResultItemsCoberturas;
+    private List<XmlEstadoCuenta> xmlEstadoCuentas;
+    private List<XmlSiniestros> xmlSiniestros;
+    private List<XmlDebitos> xmlDebitos;
+    private List<XmlNotificaciones> xmlNotificaciones;
+
+
+
 
 
     public XmlTokenLoginResult(){
@@ -131,5 +139,45 @@ public class XmlTokenLoginResult {
 
     public void setXmlMotivosList(List<XmlMotivos> xmlMotivosList) {
         this.xmlMotivosList = xmlMotivosList;
+    }
+
+    public List<XmlTokenLoginResultItemsCoberturas> getXmlTokenLoginResultItemsCoberturas() {
+        return xmlTokenLoginResultItemsCoberturas;
+    }
+
+    public void setXmlTokenLoginResultItemsCoberturas(List<XmlTokenLoginResultItemsCoberturas> xmlTokenLoginResultItemsCoberturas) {
+        this.xmlTokenLoginResultItemsCoberturas = xmlTokenLoginResultItemsCoberturas;
+    }
+
+    public List<XmlEstadoCuenta> getXmlEstadoCuentas() {
+        return xmlEstadoCuentas;
+    }
+
+    public void setXmlEstadoCuentas(List<XmlEstadoCuenta> xmlEstadoCuentas) {
+        this.xmlEstadoCuentas = xmlEstadoCuentas;
+    }
+
+    public List<XmlSiniestros> getXmlSiniestros() {
+        return xmlSiniestros;
+    }
+
+    public void setXmlSiniestros(List<XmlSiniestros> xmlSiniestros) {
+        this.xmlSiniestros = xmlSiniestros;
+    }
+
+    public List<XmlDebitos> getXmlDebitos() {
+        return xmlDebitos;
+    }
+
+    public void setXmlDebitos(List<XmlDebitos> xmlDebitos) {
+        this.xmlDebitos = xmlDebitos;
+    }
+
+    public List<XmlNotificaciones> getXmlNotificaciones() {
+        return xmlNotificaciones;
+    }
+
+    public void setXmlNotificaciones(List<XmlNotificaciones> xmlNotificaciones) {
+        this.xmlNotificaciones = xmlNotificaciones;
     }
 }

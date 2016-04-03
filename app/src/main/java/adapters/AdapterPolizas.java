@@ -17,6 +17,8 @@ import java.util.HashMap;
 
 import app.hn.com.ficohsaseguros.R;
 import interfaces.OnItemClickListener;
+import models.XmlTokenLoginResult;
+import models.XmlTokenLoginResultItems;
 
 
 /**
@@ -24,8 +26,8 @@ import interfaces.OnItemClickListener;
  */
 public class AdapterPolizas extends RecyclerView.Adapter<AdapterPolizas.ViewHolder> {
 
-    private NodeList mDataset;
-    private NodeList mDatasetOriginal;
+    private XmlTokenLoginResult mDataset;
+    private XmlTokenLoginResult mDatasetOriginal;
 
     private ArrayList<HashMap<String, String>> data;
     private ArrayList<HashMap<String, String>> originaldata;
@@ -36,6 +38,7 @@ public class AdapterPolizas extends RecyclerView.Adapter<AdapterPolizas.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView generic_field_id, generic_field_1, generic_field_2, generic_field_3, generic_field_4,generic_field_5,generic_field_6,generic_field_7,generic_field_8;
+        private TextView generic_field_9, generic_field_10, generic_field_11, generic_field_12,generic_field_13,generic_field_14,generic_field_15;
         public ImageView imageView;
 
 
@@ -51,6 +54,15 @@ public class AdapterPolizas extends RecyclerView.Adapter<AdapterPolizas.ViewHold
             generic_field_6 = (TextView) v.findViewById(R.id.generic_field_6);
             generic_field_7 = (TextView) v.findViewById(R.id.generic_field_7);
             generic_field_8= (TextView) v.findViewById(R.id.generic_field_8);
+
+            generic_field_9= (TextView) v.findViewById(R.id.generic_field_9);
+            generic_field_10= (TextView) v.findViewById(R.id.generic_field_10);
+            generic_field_11= (TextView) v.findViewById(R.id.generic_field_11);
+            generic_field_12= (TextView) v.findViewById(R.id.generic_field_12);
+            generic_field_13= (TextView) v.findViewById(R.id.generic_field_13);
+            generic_field_14= (TextView) v.findViewById(R.id.generic_field_14);
+            generic_field_15= (TextView) v.findViewById(R.id.generic_field_15);
+
             imageView = (ImageView) v.findViewById(R.id.generic_image);
             v.setOnClickListener(this);
         }
@@ -66,7 +78,7 @@ public class AdapterPolizas extends RecyclerView.Adapter<AdapterPolizas.ViewHold
     }
 
 
-    public AdapterPolizas(NodeList myDataset) {
+    public AdapterPolizas(XmlTokenLoginResult myDataset) {
         mDataset = myDataset;
         mDatasetOriginal = myDataset;
     }
@@ -82,38 +94,30 @@ public class AdapterPolizas extends RecyclerView.Adapter<AdapterPolizas.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Node node = mDataset.item(position);
-        NodeList venueChildNodes = node.getChildNodes();
 
-        int cantidadTotal = venueChildNodes.getLength();
 
-        String generic_field_1 = "";
-        String generic_field_2 = "";
+        holder.generic_field_1.setText("Poliza : ".concat(mDataset.getNro_pol()));
+        holder.generic_field_2.setText("Ramo : ".concat(mDataset.getTxt_ramo()));
+        holder.generic_field_3.setText("Sucursal :".concat(mDataset.getTxt_suc()));
+        holder.generic_field_4.setText("Año : ".concat(mDataset.getAnio_pol()));
+        holder.generic_field_5.setText("Estado : ".concat(mDataset.getTxt_estado_pol()));
+        holder.generic_field_6.setText("Agente : ".concat("PENTINTE"));
+        holder.generic_field_7.setText("Contratante : ".concat(mDataset.getTxt_contratante()));
+        holder.generic_field_8.setText("Vigencia : ".concat("PENDIENTE"));
 
-        for (int i = 0; i < cantidadTotal; i++) {
 
-            Node nodeItem = venueChildNodes.item(i).getChildNodes().item(0);
-            if (nodeItem != null){
-                switch (i) {
-                    case 0:
-                        generic_field_1 = nodeItem.getNodeValue();
-                        break;
-                    case 1:
-                        generic_field_2 = nodeItem.getNodeValue();
-                        break;
-                }
-            }
+        if(!mDataset.getXmlTokenLoginResultItemsList().isEmpty()){
+            XmlTokenLoginResultItems xmlTokenLoginResultItems =  mDataset.getXmlTokenLoginResultItemsList().get(0);
+
+            holder.generic_field_9.setText("Chasis : ".concat(xmlTokenLoginResultItems.getTxt_chasis()));
+            holder.generic_field_10.setText("Motor : ".concat(xmlTokenLoginResultItems.getTxt_motor()));
+            holder.generic_field_11.setText("Placa : ".concat(xmlTokenLoginResultItems.getTxt_placa()));
+            holder.generic_field_12.setText("Marca : ".concat(xmlTokenLoginResultItems.getTxt_marca()));
+            holder.generic_field_13.setText("Modelo : ".concat(xmlTokenLoginResultItems.getTxt_modelo()));
+            holder.generic_field_14.setText("Color : ".concat(xmlTokenLoginResultItems.getTxt_color()));
+            holder.generic_field_15.setText("Año Modelo : ".concat(xmlTokenLoginResultItems.getAaaa_modelo()));
 
         }
-
-        holder.generic_field_1.setText("Poliza : 01");
-        holder.generic_field_2.setText("Ramo : #AUTOS");
-        holder.generic_field_3.setText("Sucursal :SPS ");
-        holder.generic_field_4.setText("Año : 1999");
-        holder.generic_field_5.setText("Estado : Activa");
-        holder.generic_field_6.setText("Agente : BROKER");
-        holder.generic_field_7.setText("Contratante : ABC CONTRACT");
-        holder.generic_field_8.setText("Vigencia : 10/10/2016");
 
 
 
@@ -121,10 +125,10 @@ public class AdapterPolizas extends RecyclerView.Adapter<AdapterPolizas.ViewHold
 
     @Override
     public int getItemCount() {
-        return mDataset.getLength();
+        return 1;
     }
 
-    public void getFirstFilter(NodeList newValues){
+    public void getFirstFilter(XmlTokenLoginResult newValues){
         mDataset = newValues;
         getFilter().filter("");
     }
@@ -143,10 +147,10 @@ public class AdapterPolizas extends RecyclerView.Adapter<AdapterPolizas.ViewHold
             protected FilterResults performFiltering(CharSequence constraint) {
 
                 FilterResults results = new FilterResults();
-                NodeList filteredArrayNames = mDataset;
+                XmlTokenLoginResult filteredArrayNames = mDataset;
 
-                results.count = filteredArrayNames.getLength();
-                results.values = filteredArrayNames;
+                //results.count = filteredArrayNames.getLength();
+                //results.values = filteredArrayNames;
                 return results;
             }
         };

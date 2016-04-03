@@ -1,18 +1,28 @@
 package activities;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.google.gson.Gson;
+
 import org.w3c.dom.NodeList;
+
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.List;
 
 import adapters.AdapterGenerico;
 import adapters.AdapterPolizas;
 import app.hn.com.ficohsaseguros.R;
 import interfaces.OnItemClickListener;
+import models.XmlTokenLoginGestiones;
+import models.XmlTokenLoginResult;
 import util.XpathUtil;
 
 /**
@@ -24,6 +34,7 @@ public class PolizasActivity extends Activity {
     private AdapterPolizas mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private XmlTokenLoginResult xmlTokenLoginResult ;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +47,7 @@ public class PolizasActivity extends Activity {
 
         getActionBar().setTitle("Polizas");
 
-        final String xmlNotificacion1 = XpathUtil.buildXmlNotificacion("#111", "Poliza de Autos");
+        /*final String xmlNotificacion1 = XpathUtil.buildXmlNotificacion("#111", "Poliza de Autos");
 
         final String cadena = "<NewDataSet>" +
                 xmlNotificacion1 +
@@ -45,7 +56,20 @@ public class PolizasActivity extends Activity {
 
 
         NodeList nodeList = XpathUtil.getXptathResult(cadena, "/NewDataSet/notificacion");
-        setListData(nodeList);
+        setListData(nodeList);*/
+
+        SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String json = "";
+        if (GetPrefs.contains(FicohsaConstants.JSON)) {
+            json = GetPrefs.getString(FicohsaConstants.JSON, "");
+            Gson gson = new Gson();
+            BufferedReader br = new BufferedReader(new StringReader(json));
+            xmlTokenLoginResult = gson.fromJson(br, XmlTokenLoginResult.class);
+        }
+
+        if(xmlTokenLoginResult != null ){
+            setListData(xmlTokenLoginResult);
+        }
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -57,7 +81,7 @@ public class PolizasActivity extends Activity {
 
     }
 
-    public void setListData(NodeList values) {
+    public void setListData(XmlTokenLoginResult values) {
         // specify an adapter (see also next example)
 
         mAdapter = new AdapterPolizas(values);

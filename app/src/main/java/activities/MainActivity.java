@@ -38,6 +38,7 @@ import app.hn.com.ficohsaseguros.DrawerItem;
 import app.hn.com.ficohsaseguros.DrawerListAdapter;
 import app.hn.com.ficohsaseguros.R;
 import asyntask.ConsultaWebService;
+import asyntask.ConsultarNotificaciones;
 import asyntask.ObtenerCoordenadaWebService;
 import dto.XmlContainer;
 import fragments.FragmentConsulta;
@@ -266,10 +267,10 @@ public class MainActivity extends Activity implements LocationListener {
 
                 break;
             case "Notificaciones":
-                Intent ourintentNotify = new Intent(activity, NotificacionesActivity.class);
-                startActivity(ourintentNotify);
-                //fragmentManager.beginTransaction().replace(R.id.conten
-                // t_frame, fragmentNotificaciones).commit();
+                //Intent ourintentNotify = new Intent(activity, NotificacionesActivity.class);
+                //startActivity(ourintentNotify);
+                new ConsultarNotificaciones(this).execute(password);
+
                 break;
             case "Consultas Generales":
                 fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentConsulta).commit();
