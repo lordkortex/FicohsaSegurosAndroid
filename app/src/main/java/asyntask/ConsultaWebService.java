@@ -144,11 +144,11 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
 
 
         } catch (IOException e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (XmlPullParserException e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (Exception e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         }
 
         return response;

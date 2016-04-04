@@ -1,9 +1,17 @@
 package activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.view.MenuItemCompat;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,12 +43,28 @@ import models.XmlTokenLoginResult;
 public class MapActivity extends Activity {
     //static final LatLng FicohsaPoint = new LatLng(40.76793169992044, -73.98180484771729);
     private GoogleMap googleMap;
+    private Context context;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        getActionBar().setTitle("Ubicacion");
+        //getActionBar().setTitle("Ubicacion");
+
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getActionBar().setCustomView(R.layout.actionbar_tittle_back);
+
+        ImageButton b = (ImageButton) findViewById(R.id.imageViewBack);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.finish();
+            }
+        });
+
+
+        activity = this;
 
 
        // new ObtenerCoordenadaWebService(this).execute("abcd72015");
@@ -105,4 +129,7 @@ public class MapActivity extends Activity {
             e.printStackTrace();
         }
     }
+
+
+
 }

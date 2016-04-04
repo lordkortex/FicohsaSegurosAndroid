@@ -149,11 +149,11 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
             response = gson.toJson(xmlTokenLoginResult);
 
         } catch (IOException e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (XmlPullParserException e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (Exception e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         }
 
 

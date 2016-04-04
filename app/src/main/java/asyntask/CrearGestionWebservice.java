@@ -105,11 +105,11 @@ public class CrearGestionWebservice extends AsyncTask<String , Void, String> {
             }
 
         } catch (IOException e) {
-            xml = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            xml = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (XmlPullParserException e) {
-            xml = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            xml = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (Exception e) {
-            xml = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            xml = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         }
 
 

@@ -87,17 +87,16 @@ public class AdapterNotificaciones extends RecyclerView.Adapter<AdapterNotificac
         String txt_titulo = node.getTxt_titulo();
         String txt_desc = node.getTxt_desc();
         String fec_comp = node.getFec_comp();
-        String imagenB64 = node.getImagenB64().replace("data:image/jpeg;base64,","");
 
-        byte[] decodedString = Base64.decode(imagenB64, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-
-        holder.imageView.setImageBitmap(decodedByte);
-
+        if(node.getImagenB64() != ""){
+            String imagenB64 = node.getImagenB64().replace("data:image/jpeg;base64,","");
+            byte[] decodedString = Base64.decode(imagenB64, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.imageView.setImageBitmap(decodedByte);
+        }
 
         holder.generic_field_1.setText("id_notificacion : ".concat(id_notificacion));
         holder.generic_field_2.setText(txt_titulo);
-        holder.generic_field_3.setText(imagenB64);
         //holder.generic_field_3.setText(txt_desc);
         //holder.generic_field_4.setText(fec_comp);
         //holder.generic_field_5.setText("Prima Total: ".concat(imagenB64));

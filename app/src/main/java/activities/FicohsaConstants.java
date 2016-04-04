@@ -11,6 +11,7 @@ public class FicohsaConstants {
     public static final String RUN_MAP_STARTED = "RUN_MAP_STARTED";
     public static final String JSON = "JSON";
     public static final String TOKEN_ANDROID = "TOKEN_ANDROID";
+    public static final String GENERIC_ERROR = "Ocurrió un error, favor intentar de nuevo.";
 
     public  FicohsaConstants(){
 

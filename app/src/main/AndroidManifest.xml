@@ -171,15 +171,15 @@
             android:name="intentservices.RSSPullService"
             android:exported="false" />
 
-       <!-- DEBUG
+       <!-- DEBUG-->
        <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCWTeLRI2KMRgohWf4QDZufZPwx9hA3AFo" />-->
+            android:value="AIzaSyCWTeLRI2KMRgohWf4QDZufZPwx9hA3AFo" />
 
-        <!-- PORDUCCION -->
+        <!-- PORDUCCION
          <meta-data
              android:name="com.google.android.maps.v2.API_KEY"
-             android:value="AIzaSyAY4CCY7J1znblHCrI_pnbliccIW8y4B3k" />
+             android:value="AIzaSyAY4CCY7J1znblHCrI_pnbliccIW8y4B3k" />-->
      </application>
 
  </manifest>

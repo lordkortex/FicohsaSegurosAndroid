@@ -1,5 +1,6 @@
 package activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,10 +10,13 @@ import android.util.Base64;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import app.hn.com.ficohsaseguros.R;
+import interfaces.PanAndZoomListener;
 
 /**
  * Created by mac on 2/4/16.
@@ -27,6 +31,8 @@ public class NotificationImageActivity extends Activity {
     float lastFocusX;
     float lastFocusY;
 
+    private Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,23 +40,41 @@ public class NotificationImageActivity extends Activity {
         imageView = (ImageView)findViewById(R.id.imageViewNotification);
         SGD = new ScaleGestureDetector(this,new ScaleListener());
 
+        activity = this;
+
+        //getActionBar().setTitle("Ficohsa | Seguros");
+        //getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        //getActionBar().setCustomView(R.layout.actionbar_title);
+
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getActionBar().setCustomView(R.layout.actionbar_tittle_back);
+
+        ImageButton b = (ImageButton) findViewById(R.id.imageViewBack);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.finish();
+            }
+        });
+
         Bundle bundle = getIntent().getExtras();
         String imagen = bundle.getString("image64");
         String imagenB64 = imagen.replace("data:image/jpeg;base64,","");
 
-        byte[] decodedString = Base64.decode(imagenB64, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        //imageView.setImageBitmap(decodedByte);
+        if(imagenB64 != ""){
+            byte[] decodedString = Base64.decode(imagenB64, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            //imageView.setImageBitmap(decodedByte);
+           FrameLayout view = new FrameLayout(this);
+            FrameLayout.LayoutParams fp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT, Gravity.TOP | Gravity.LEFT);
+            ImageView imageView = new ImageView(this);
+            imageView.setImageBitmap(decodedByte);
+            imageView.setScaleType(ImageView.ScaleType.MATRIX);
+            view.addView(imageView, fp);
+            view.setOnTouchListener(new PanAndZoomListener(view, imageView, PanAndZoomListener.Anchor.TOPLEFT));
+            setContentView(view);
+        }
 
-
-        FrameLayout view = new FrameLayout(this);
-        FrameLayout.LayoutParams fp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT, Gravity.TOP | Gravity.LEFT);
-        ImageView imageView = new ImageView(this);
-        imageView.setImageBitmap(decodedByte);
-        imageView.setScaleType(ImageView.ScaleType.MATRIX);
-        view.addView(imageView, fp);
-        view.setOnTouchListener(new PanAndZoomListener(view, imageView, PanAndZoomListener.Anchor.TOPLEFT));
-    setContentView(view);
 
     }
 

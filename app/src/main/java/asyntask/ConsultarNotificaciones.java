@@ -127,11 +127,11 @@ public class ConsultarNotificaciones  extends AsyncTask<String, Void, String> {
 
 
         } catch (IOException e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (XmlPullParserException e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (Exception e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         }
 
         return response;
@@ -144,7 +144,7 @@ public class ConsultarNotificaciones  extends AsyncTask<String, Void, String> {
             Intent ourintentNotify = new Intent(context, NotificacionesActivity.class);
             this.context.startActivity(ourintentNotify);
         }else{
-            Toast.makeText(context,response, Toast.LENGTH_LONG).show();
+            //Toast.makeText(context,response, Toast.LENGTH_LONG).show();
 
         }
 
@@ -175,10 +175,10 @@ public class ConsultarNotificaciones  extends AsyncTask<String, Void, String> {
             List<XmlNotificaciones> xmlNotificacionesList = new ArrayList<XmlNotificaciones>();
 
             if(root.hasProperty("clNotificacionMovil")){
-                SoapObject listaNotificaciones = (SoapObject) root.getProperty("clNotificacionMovil");
+                SoapObject listaNotificacionesCl = (SoapObject) root.getProperty("clNotificacionMovil");
 
-                //if(listaNotificacionesCl.hasProperty("notificacionMovil")){
-                  //  SoapObject listaNotificaciones = (SoapObject) listaNotificacionesCl.getProperty("notificacionMovil");
+                if(listaNotificacionesCl.hasProperty("notificacionMovil")){
+                    SoapObject listaNotificaciones = (SoapObject) listaNotificacionesCl.getProperty("notificacionMovil");
 
 
                     for (int h = 0; h < listaNotificaciones.getPropertyCount(); h++) {
@@ -199,8 +199,7 @@ public class ConsultarNotificaciones  extends AsyncTask<String, Void, String> {
 
 
                         //XmlContainer.xmlMotivosList.put(id_motivo,txt_motivo);
-                        //
-                        //}
+                }
                 }
             }
 

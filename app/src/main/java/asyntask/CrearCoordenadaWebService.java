@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import activities.FicohsaConstants;
+
 /**
  * Created by mac on 27/10/15.
  */
@@ -96,11 +98,11 @@ public class CrearCoordenadaWebService extends AsyncTask<String , Void, String> 
                 //SoapFault12 result = (SoapFault12)envelope.bodyIn;
                 xml="";//result.getProperty(0).toString();
             } catch (IOException e) {
-                xml = "Tiempo de Espera agotado.";//e.getMessage().toString();
+                xml = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
             } catch (XmlPullParserException e) {
-                xml = "Tiempo de Espera agotado.";//e.getMessage().toString();
+                xml = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
             } catch (Exception e) {
-                xml = "Tiempo de Espera agotado.";//e.getMessage().toString();
+                xml = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
             }
         }
 

@@ -1,5 +1,6 @@
 package activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -13,6 +14,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -47,6 +49,22 @@ public class RunMapActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_button_run);
         activity = this;
+
+        //getActionBar().setTitle("Ficohsa | Seguros");
+        //getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        //getActionBar().setCustomView(R.layout.actionbar_title);
+
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getActionBar().setCustomView(R.layout.actionbar_tittle_back);
+
+        ImageButton b = (ImageButton) findViewById(R.id.imageViewBack);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.finish();
+            }
+        });
+
 
 
         SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());

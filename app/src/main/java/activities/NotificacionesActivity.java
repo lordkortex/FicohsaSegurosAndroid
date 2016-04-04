@@ -1,6 +1,8 @@
 package activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -39,10 +42,38 @@ public class NotificacionesActivity extends Activity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private XmlTokenLoginResult xmlTokenLoginResult ;
     private Context context;
+    private ProgressDialog Brockerdialog;
+    private Activity activity;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notificaciones);
+        context = this;
+        activity = this;
+        //getActionBar().setTitle("Ficohsa | Seguros");
+        //getActionBar().setTitle("Notificaciones");
+        //getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        //getActionBar().setCustomView(R.layout.actionbar_title);
+
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getActionBar().setCustomView(R.layout.actionbar_tittle_back);
+
+        ImageButton b = (ImageButton) findViewById(R.id.imageViewBack);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.finish();
+            }
+        });
+
+
+        Brockerdialog = new ProgressDialog(context);
+        Brockerdialog.setMessage("Obteniendo Datos ...");
+        Brockerdialog.setCancelable(false);
+        Brockerdialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        Brockerdialog.show();
+
 
         context = this;
 
@@ -51,7 +82,6 @@ public class NotificacionesActivity extends Activity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        getActionBar().setTitle("Notificaciones");
 
         SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String json = "";
@@ -73,6 +103,9 @@ public class NotificacionesActivity extends Activity {
                 swipeRefreshLayout.setRefreshing(Boolean.FALSE);
             }
         });
+
+        Brockerdialog.setCancelable(true);
+        Brockerdialog.dismiss();
 
     }
 

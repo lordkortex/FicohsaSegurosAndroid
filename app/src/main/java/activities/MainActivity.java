@@ -1,5 +1,6 @@
 package activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -16,18 +17,15 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.fitness.FitnessStatusCodes;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -37,10 +35,8 @@ import java.util.ArrayList;
 import app.hn.com.ficohsaseguros.DrawerItem;
 import app.hn.com.ficohsaseguros.DrawerListAdapter;
 import app.hn.com.ficohsaseguros.R;
-import asyntask.ConsultaWebService;
 import asyntask.ConsultarNotificaciones;
 import asyntask.ObtenerCoordenadaWebService;
-import dto.XmlContainer;
 import fragments.FragmentConsulta;
 import fragments.FragmentEmpty;
 import fragments.FragmentMap;
@@ -76,6 +72,22 @@ public class MainActivity extends Activity implements LocationListener {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_main);
+
+
+        /*ActionBar actionBar = getActionBar();
+        ImageView imageView = new ImageView(actionBar.getThemedContext());
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        imageView.setImageResource(R.drawable.rsz_logoficohsa);
+        ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.WRAP_CONTENT, Gravity.RIGHT
+                | Gravity.CENTER_VERTICAL);
+        layoutParams.rightMargin = 40;
+        imageView.setLayoutParams(layoutParams);
+        actionBar.setCustomView(imageView);*/
+
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getActionBar().setCustomView(R.layout.actionbar_title);
 
         // Get the location manager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -143,7 +155,7 @@ public class MainActivity extends Activity implements LocationListener {
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.drawable.rsz_tres_barras,  /* nav drawer image to replace 'Up' caret */
                 R.string.drawer_open,  /* "open drawer" description for accessibility */
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         ) {
@@ -162,6 +174,18 @@ public class MainActivity extends Activity implements LocationListener {
         if (savedInstanceState == null) {
             selectItem(0);
         }
+
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment fragmentPanicButton = new FragmentPanicButton();
+        Bundle args = new Bundle();
+        args.putInt("", 0);
+        args.putString("latitud", latitud);
+        args.putString("longitud", longitud);
+        fragmentPanicButton.setArguments(args);
+
+        fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentPanicButton).commit();
+
+
     }
 
     @Override
@@ -258,7 +282,14 @@ public class MainActivity extends Activity implements LocationListener {
                 fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentEmpty).commit();
                 break;
             case "Solicitar Asistencia":
-                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentPanicButton).commit();
+                //fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentPanicButton).commit();
+
+                Intent ourintenConsultas = new Intent(activity, TipoAsistenciaActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("latitud",latitud);
+                bundle.putString("longitud",longitud);
+                ourintenConsultas.putExtras(bundle);
+                startActivity(ourintenConsultas);
                 break;
             case "Ubicacion Asistencia":
                 //Intent ourintent = new Intent(activity, MapActivity.class);

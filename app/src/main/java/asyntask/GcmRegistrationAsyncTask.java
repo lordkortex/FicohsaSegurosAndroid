@@ -29,6 +29,8 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import activities.FicohsaConstants;
+
 /**
  * Created by mac on 22/11/15.
  */
@@ -120,12 +122,12 @@ public class GcmRegistrationAsyncTask extends AsyncTask<String , Void, String> {
             SoapObject result = (SoapObject)envelope.bodyIn;
             xml=result.getProperty(0).toString();
         } catch (IOException e) {
-            xml = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            xml = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
 
         } catch (XmlPullParserException e) {
-            xml = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            xml = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (Exception e) {
-            xml = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            xml = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         }
 
 

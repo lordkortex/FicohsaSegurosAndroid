@@ -1,4 +1,4 @@
-package activities;
+package interfaces;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;

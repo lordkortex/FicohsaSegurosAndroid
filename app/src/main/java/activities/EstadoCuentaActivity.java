@@ -1,5 +1,6 @@
 package activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,7 +8,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.gson.Gson;
 
@@ -34,6 +37,7 @@ public class EstadoCuentaActivity extends Activity {
     private RecyclerView.LayoutManager mLayoutManager;
     private SwipeRefreshLayout swipeRefreshLayout;
     private XmlTokenLoginResult xmlTokenLoginResult ;
+    private Activity activity;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +48,21 @@ public class EstadoCuentaActivity extends Activity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        getActionBar().setTitle("Estado de Cuentas");
+
+        activity = this;
+        //getActionBar().setTitle("Estado de Cuentas");
+        //getActionBar().setTitle("Ficohsa | Seguros");
+        //getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getActionBar().setCustomView(R.layout.actionbar_tittle_back);
+
+        ImageButton b = (ImageButton) findViewById(R.id.imageViewBack);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.finish();
+            }
+        });
 
         SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String json = "";
@@ -97,6 +115,17 @@ public class EstadoCuentaActivity extends Activity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }
 

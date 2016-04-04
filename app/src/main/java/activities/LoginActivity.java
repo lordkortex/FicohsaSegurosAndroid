@@ -1,5 +1,6 @@
 package activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,9 @@ public class LoginActivity extends Activity {
         activity = this;
 
         etPassword = (EditText) findViewById(R.id.tvPassword);
+        getActionBar().hide();
+         //getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        //getActionBar().setCustomView(R.layout.actionbar_title);
 
 
         SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());

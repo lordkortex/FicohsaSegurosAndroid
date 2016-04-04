@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import activities.FicohsaConstants;
 import activities.MainActivity;
 import activities.MapActivity;
 import dto.XmlContainer;
@@ -87,11 +88,11 @@ public class ObtenerCoordenadaWebService extends AsyncTask<String, Void, String>
             }
 
         } catch (IOException e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (XmlPullParserException e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (Exception e) {
-            response = "Tiempo de Espera agotado.";//e.getMessage().toString();
+            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         }
 
 
@@ -126,69 +127,71 @@ public class ObtenerCoordenadaWebService extends AsyncTask<String, Void, String>
         }else{
             if(root.hasProperty("gestiones")){
                 SoapObject gestiones = (SoapObject) root.getProperty("gestiones");
-                SoapObject localizacionGestion = (SoapObject) gestiones.getProperty("localizacionGestion");
+                if(gestiones.hasProperty("localizacionGestion")){
+                    SoapObject localizacionGestion = (SoapObject) gestiones.getProperty("localizacionGestion");
 
-                String id_gestion = localizacionGestion.getProperty("id_gestion").toString();
-                String txt_tipo = localizacionGestion.getProperty("txt_tipo").toString();
-                String latitudDestino = localizacionGestion.getProperty("latitudDestino").toString();
-                String longitudDestino = localizacionGestion.getProperty("longitudDestino").toString();
+                    String id_gestion = localizacionGestion.getProperty("id_gestion").toString();
+                    String txt_tipo = localizacionGestion.getProperty("txt_tipo").toString();
+                    String latitudDestino = localizacionGestion.getProperty("latitudDestino").toString();
+                    String longitudDestino = localizacionGestion.getProperty("longitudDestino").toString();
 
-                xmlLocalizacionGestion.setId_gestion(id_gestion);
-                xmlLocalizacionGestion.setLatitudDestino(latitudDestino);
-                xmlLocalizacionGestion.setLongitudDestino(longitudDestino);
-                xmlLocalizacionGestion.setTxt_tipo(txt_tipo);
-
-
-                if(localizacionGestion.hasProperty("token")){
-
-                    SoapObject token = (SoapObject) localizacionGestion.getProperty("token");
-                    List<XmlLocalizacionToken> xmlLocalizacionTokenList = new ArrayList<XmlLocalizacionToken>();
-                    xmlLocalizacionGestion.setXmlLocalizacionTokenList(xmlLocalizacionTokenList);
-
-                    for (int i = 0; i < token.getPropertyCount(); i++) {
-                        SoapObject item = (SoapObject) token.getProperty(i);
-
-                        XmlLocalizacionToken xmlLocalizacionToken = new XmlLocalizacionToken();
-
-                        String txt_token = item.getProperty("txt_token").toString();
-                        String txt_nombre = item.getProperty("txt_nombre").toString();
-
-                        xmlLocalizacionToken.setTxt_nombre(txt_token);
-                        xmlLocalizacionToken.setTxt_token(txt_nombre);
-
-                        xmlLocalizacionTokenList.add(xmlLocalizacionToken);
+                    xmlLocalizacionGestion.setId_gestion(id_gestion);
+                    xmlLocalizacionGestion.setLatitudDestino(latitudDestino);
+                    xmlLocalizacionGestion.setLongitudDestino(longitudDestino);
+                    xmlLocalizacionGestion.setTxt_tipo(txt_tipo);
 
 
-                        if(item.hasProperty("puntos")){
-                            SoapObject puntos = (SoapObject) item.getProperty("puntos");
-                            List<XmlLocalizacionPuntos> xmlLocalizacionPuntosList = new ArrayList<XmlLocalizacionPuntos>();
-                            xmlLocalizacionToken.setXmlLocalizacionPuntosList(xmlLocalizacionPuntosList);
+                    if(localizacionGestion.hasProperty("token")){
+
+                        SoapObject token = (SoapObject) localizacionGestion.getProperty("token");
+                        List<XmlLocalizacionToken> xmlLocalizacionTokenList = new ArrayList<XmlLocalizacionToken>();
+                        xmlLocalizacionGestion.setXmlLocalizacionTokenList(xmlLocalizacionTokenList);
+
+                        for (int i = 0; i < token.getPropertyCount(); i++) {
+                            SoapObject item = (SoapObject) token.getProperty(i);
+
+                            XmlLocalizacionToken xmlLocalizacionToken = new XmlLocalizacionToken();
+
+                            String txt_token = item.getProperty("txt_token").toString();
+                            String txt_nombre = item.getProperty("txt_nombre").toString();
+
+                            xmlLocalizacionToken.setTxt_nombre(txt_token);
+                            xmlLocalizacionToken.setTxt_token(txt_nombre);
+
+                            xmlLocalizacionTokenList.add(xmlLocalizacionToken);
 
 
-                            for (int h = 0; h < puntos.getPropertyCount(); h++) {
-                                SoapObject cobertura = (SoapObject) puntos.getProperty(h);
+                            if(item.hasProperty("puntos")){
+                                SoapObject puntos = (SoapObject) item.getProperty("puntos");
+                                List<XmlLocalizacionPuntos> xmlLocalizacionPuntosList = new ArrayList<XmlLocalizacionPuntos>();
+                                xmlLocalizacionToken.setXmlLocalizacionPuntosList(xmlLocalizacionPuntosList);
 
-                                String latitud = cobertura.getProperty("latitud").toString();
-                                String longitud = cobertura.getProperty("longitud").toString();
 
-                                XmlLocalizacionPuntos xmlLocalizacionPuntos = new XmlLocalizacionPuntos();
+                                for (int h = 0; h < puntos.getPropertyCount(); h++) {
+                                    SoapObject cobertura = (SoapObject) puntos.getProperty(h);
 
-                                xmlLocalizacionPuntos.setLatitud(latitud);
-                                xmlLocalizacionPuntos.setLongitud(longitud);
+                                    String latitud = cobertura.getProperty("latitud").toString();
+                                    String longitud = cobertura.getProperty("longitud").toString();
 
-                                xmlLocalizacionPuntosList.add(xmlLocalizacionPuntos);
+                                    XmlLocalizacionPuntos xmlLocalizacionPuntos = new XmlLocalizacionPuntos();
+
+                                    xmlLocalizacionPuntos.setLatitud(latitud);
+                                    xmlLocalizacionPuntos.setLongitud(longitud);
+
+                                    xmlLocalizacionPuntosList.add(xmlLocalizacionPuntos);
+
+                                }
 
                             }
-
                         }
+
                     }
+
+                    XmlContainer.xmlLocalizacionGestion = xmlLocalizacionGestion;
 
                 }
 
-
-                XmlContainer.xmlLocalizacionGestion = xmlLocalizacionGestion;
-
-            }
+             }
         }
 
 
