@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import activities.ConsultaActivity;
 import activities.DebitosActivity;
 import activities.EstadoCuentaActivity;
 import activities.EstadoSiniestroActivity;
@@ -144,7 +145,7 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
 
 
         } catch (IOException e) {
-            response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
+             response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (XmlPullParserException e) {
             response = FicohsaConstants.GENERIC_ERROR;//e.getMessage().toString();
         } catch (Exception e) {
@@ -157,10 +158,16 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String response) {
 
+        Intent ourintentNotify = new Intent(context, ConsultaActivity.class);
+        this.context.startActivity(ourintentNotify);
 
         if(response.equals("")){
 
-            switch (pActivityToCall) {
+            //Intent ourintentNotify = new Intent(context, ConsultaActivity.class);
+            //this.context.startActivity(ourintentNotify);
+
+
+            /*switch (pActivityToCall) {
                 case "0":
                     Intent ourintentNotify = new Intent(context, PolizasActivity.class);
                     this.context.startActivity(ourintentNotify);
@@ -179,7 +186,7 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
                     this.context.startActivity(ourintentDebitos);
                     break;
 
-            }
+            }*/
 
 
 
@@ -235,6 +242,9 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
                 xmlTokenLoginResult.setTxt_estado_pol(txt_estado_pol);
                 xmlTokenLoginResult.setTxt_ramo(txt_ramo);
                 xmlTokenLoginResult.setTxt_suc(txt_suc);
+                xmlTokenLoginResult.setTxt_agente(txt_agente);
+                xmlTokenLoginResult.setFec_vig_desde(fec_vig_desde);
+                xmlTokenLoginResult.setFec_vig_hasta(fec_vig_hasta);
                 //xmlTokenLoginResult.setStrError(strError);
 
 
@@ -432,6 +442,8 @@ public class ConsultaWebService extends AsyncTask<String, Void, String> {
                                 xmlSiniestrosItem.setTxt_contratante(stxt_contratante);
                                 xmlSiniestrosItem.setTxt_coberturas(stxt_coberturas);
                                 xmlSiniestros.add(xmlSiniestrosItem);
+                                //xmlSiniestros.add(xmlSiniestrosItem);
+                                //xmlSiniestros.add(xmlSiniestrosItem);
 
                             }
 

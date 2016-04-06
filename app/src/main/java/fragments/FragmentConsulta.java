@@ -2,7 +2,6 @@ package fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,10 +15,7 @@ import android.widget.GridView;
 
 import java.util.ArrayList;
 
-import activities.EstadoCuentaActivity;
-import activities.EstadoSiniestroActivity;
 import activities.FicohsaConstants;
-import activities.PolizasActivity;
 import adapters.AdapterMenuGridView;
 import app.hn.com.ficohsaseguros.R;
 import asyntask.ConsultaWebService;
@@ -71,7 +67,7 @@ public class FragmentConsulta  extends Fragment {
 
 
         gridView = (GridView) getActivity().findViewById(R.id.gridView1);
-        customGridAdapter = new AdapterMenuGridView(getActivity(), R.layout.activiry_tipoasistencia_item, gridArray);
+        customGridAdapter = new AdapterMenuGridView(getActivity(), R.layout.activity_tipoasistencia_item, gridArray);
         gridView.setAdapter(customGridAdapter);
 
         SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getBaseContext());

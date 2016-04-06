@@ -41,17 +41,15 @@ public class AdapterDebitos  extends RecyclerView.Adapter<AdapterDebitos.ViewHol
 
         public ViewHolder(View v) {
             super(v);
-            generic_field_id = (TextView) v.findViewById(R.id.generic_field_id);
-            generic_field_1 = (TextView) v.findViewById(R.id.generic_field_1);
-            generic_field_2 = (TextView) v.findViewById(R.id.generic_field_2);
-            generic_field_3 = (TextView) v.findViewById(R.id.generic_field_3);
-            generic_field_4 = (TextView) v.findViewById(R.id.generic_field_4);
-            generic_field_5 = (TextView) v.findViewById(R.id.generic_field_5);
-            generic_field_6 = (TextView) v.findViewById(R.id.generic_field_6);
-            generic_field_7 = (TextView) v.findViewById(R.id.generic_field_7);
-            generic_field_8 = (TextView) v.findViewById(R.id.generic_field_8);
-            generic_field_9 = (TextView) v.findViewById(R.id.generic_field_9);
-            generic_field_10= (TextView) v.findViewById(R.id.generic_field_10);
+            //generic_field_id = (TextView) v.findViewById(R.id.generic_field_id);
+            generic_field_1 = (TextView) v.findViewById(R.id.TextBoxValue1);
+            generic_field_2 = (TextView) v.findViewById(R.id.TextBoxValue2);
+            generic_field_3 = (TextView) v.findViewById(R.id.TextBoxValue3);
+            generic_field_4 = (TextView) v.findViewById(R.id.TextBoxValue4);
+            generic_field_5 = (TextView) v.findViewById(R.id.TextBoxValue5);
+            generic_field_6 = (TextView) v.findViewById(R.id.TextBoxValue6);
+            generic_field_7 = (TextView) v.findViewById(R.id.TextBoxValue7);
+            generic_field_8 = (TextView) v.findViewById(R.id.TextBoxValue8);
             imageView = (ImageView) v.findViewById(R.id.generic_image);
             v.setOnClickListener(this);
         }
@@ -75,7 +73,7 @@ public class AdapterDebitos  extends RecyclerView.Adapter<AdapterDebitos.ViewHol
     @Override
     public AdapterDebitos.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                              int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_generico_item_estado_cuenta, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_item_titulo_valor_debitos, parent, false);
         ViewHolder vh = new ViewHolder(v);
         context = parent.getContext();
         return vh;
@@ -97,15 +95,14 @@ public class AdapterDebitos  extends RecyclerView.Adapter<AdapterDebitos.ViewHol
         String txt_estado_intento = node.getTxt_estado_intento();
 
 
-
-        holder.generic_field_1.setText("Numero de Trajeta : ".concat(nro_cta_tarj));
-        holder.generic_field_2.setText("Numero de Cuota : ".concat(nro_cuota));
-        holder.generic_field_3.setText("Comprobante : ".concat(nro_comprobante));
-        holder.generic_field_4.setText("Fecha Generado : ".concat(fecha_generado));
-        holder.generic_field_5.setText("Prima Total: ".concat(prima_total));
-        holder.generic_field_6.setText("Prima Pagada : ".concat(prima_pagada));
-        holder.generic_field_7.setText("Prima Vencida : ".concat(prima_vencida));
-        holder.generic_field_8.setText("Estado Intento: ".concat(txt_estado_intento));
+        holder.generic_field_1.setText(nro_cta_tarj);
+        holder.generic_field_2.setText(nro_cuota);
+        holder.generic_field_3.setText(nro_comprobante);
+        holder.generic_field_4.setText(fecha_generado);
+        holder.generic_field_5.setText(prima_total);
+        holder.generic_field_6.setText(prima_pagada);
+        holder.generic_field_7.setText(prima_vencida);
+        holder.generic_field_8.setText(txt_estado_intento);
 
 
     }

@@ -18,17 +18,17 @@
     <string name="app_name">Ficohsa Seguros</string>
     <string-array name="TagsCliente">
         <item>Solicitar Asistencia</item>
-        <item>Ubicacion Asistencia</item>
+        <item>Ubicación Asistencia</item>
         <item>Notificaciones</item>
         <item>Consultas Generales</item>
-        <item>Cerrar Sesion</item>
+        <item>Cerrar Sesión</item>
     </string-array>
     <string-array name="TagsMotorista">
         <item>Bienvenida</item>
-        <item>Ubicacion Asistencia</item>
+        <item>Ubicación Asistencia</item>
         <item>Notificaciones</item>
         <item>Gestiones</item>
-        <item>Cerrar Sesion</item>
+        <item>Cerrar Sesión</item>
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

@@ -73,6 +73,8 @@ public class NotificationImageActivity extends Activity {
             view.addView(imageView, fp);
             view.setOnTouchListener(new PanAndZoomListener(view, imageView, PanAndZoomListener.Anchor.TOPLEFT));
             setContentView(view);
+        }else{
+            setContentView(R.layout.activity_image_notificacion);
         }
 
 

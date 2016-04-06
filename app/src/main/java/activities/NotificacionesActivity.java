@@ -51,6 +51,10 @@ public class NotificacionesActivity extends Activity {
         setContentView(R.layout.activity_notificaciones);
         context = this;
         activity = this;
+
+        TextView textViewHeader = (TextView)findViewById(R.id.textView);
+        textViewHeader.setText("Notificaciones");
+
         //getActionBar().setTitle("Ficohsa | Seguros");
         //getActionBar().setTitle("Notificaciones");
         //getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);

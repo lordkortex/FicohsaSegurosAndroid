@@ -70,7 +70,7 @@ public class LoginActivity extends Activity {
                 if(password.equals("")){
                     Toast.makeText(activity, "El token no debe estar vacio.", Toast.LENGTH_LONG).show();
                 }else{
-                    new LoginWebService(activity).execute(password);
+                    new LoginWebService(activity).execute(password+";0");
 
                 }
 

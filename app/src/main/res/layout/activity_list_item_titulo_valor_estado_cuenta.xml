@@ -1,0 +1,375 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fff"
+    android:padding="14dp"
+    >
+    <LinearLayout
+        android:id="@+id/Layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:weightSum="6"
+        >
+
+        <TextView
+            android:id="@+id/TextBoxLabel1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Cuota"
+            android:textColor="@color/ficohsa_official_blue_medium"
+            android:textSize="12dp"
+            android:layout_weight="3"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextBoxValue1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="gravity" />
+
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/Layout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:layout_below="@+id/Layout1"
+        android:paddingLeft="10dp"
+        android:weightSum="6"
+
+        >
+
+        <TextView
+            android:id="@+id/TextBoxLabel2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Recibo"
+            android:textSize="12dp"
+
+            android:textColor="@color/ficohsa_official_blue_medium"
+
+            android:layout_weight="3"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextBoxValue2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="gravity" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Layout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:layout_below="@+id/Layout2"
+        android:paddingLeft="10dp"
+        android:weightSum="6"
+
+        >
+
+        <TextView
+            android:id="@+id/TextBoxLabel3"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+
+            android:text="Vencimiento"
+            android:layout_weight="3"
+            android:textColor="@color/ficohsa_official_blue_medium"
+
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextBoxValue3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="gravity" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Layout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:layout_below="@+id/Layout3"
+        android:paddingLeft="10dp"
+        android:weightSum="6"
+
+        >
+
+        <TextView
+            android:id="@+id/TextBoxLabel4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Prima Total"
+            android:textSize="12dp"
+
+            android:layout_weight="3"
+            android:textColor="@color/ficohsa_official_blue_medium"
+
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+        <TextView
+            android:id="@+id/TextBoxValue4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="gravity" />
+
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/Layout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:layout_below="@+id/Layout4"
+        android:paddingLeft="10dp"
+        android:weightSum="6"
+
+        >
+
+        <TextView
+            android:id="@+id/TextBoxLabel5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha Proceso"
+            android:textSize="12dp"
+
+            android:layout_weight="3"
+            android:textColor="@color/ficohsa_official_blue_medium"
+
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextBoxValue5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="gravity" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Layout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:layout_below="@+id/Layout5"
+        android:paddingLeft="10dp"
+        android:weightSum="6"
+
+        >
+
+        <TextView
+            android:id="@+id/TextBoxLabel6"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Estado"
+            android:textSize="12dp"
+
+            android:layout_weight="3"
+            android:textColor="@color/ficohsa_official_blue_medium"
+
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextBoxValue6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="gravity" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Layout7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:layout_below="@+id/Layout6"
+        android:paddingLeft="10dp"
+        android:weightSum="6"
+
+        >
+
+        <TextView
+            android:id="@+id/TextBoxLabel7"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textColor="@color/ficohsa_official_blue_medium"
+            android:textSize="12dp"
+
+
+            android:text="Prima Depósito"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextBoxValue7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="gravity" />
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Layout8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:layout_below="@+id/Layout7"
+        android:paddingLeft="10dp"
+        android:weightSum="6"
+
+        >
+
+        <TextView
+            android:id="@+id/TextBoxLabel8"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textColor="@color/ficohsa_official_blue_medium"
+            android:textSize="12dp"
+
+            android:text = "Prima Pagada"
+
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextBoxValue8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="gravity" />
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Layout9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:layout_below="@+id/Layout8"
+        android:paddingLeft="10dp"
+        android:weightSum="6"
+
+        >
+
+        <TextView
+            android:id="@+id/TextBoxLabel9"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textColor="@color/ficohsa_official_blue_medium"
+            android:textSize="12dp"
+
+
+            android:text = "Moneda"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextBoxValue9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="gravity" />
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/Layout10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="horizontal"
+        android:layout_below="@+id/Layout9"
+        android:paddingLeft="10dp"
+        android:weightSum="6"
+
+        >
+
+        <TextView
+            android:id="@+id/TextBoxLabel10"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textColor="@color/ficohsa_official_blue_medium"
+            android:textSize="12dp"
+
+
+            android:text = "Fecha Cobranza"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/TextBoxValue10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:textAlignment="gravity" />
+
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

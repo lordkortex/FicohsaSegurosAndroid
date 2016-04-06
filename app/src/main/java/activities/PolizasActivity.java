@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -51,6 +52,9 @@ public class PolizasActivity extends Activity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+
+        TextView textViewHeader = (TextView)findViewById(R.id.textView);
+        textViewHeader.setText("Pólizas");
         activity = this;
 
         //getActionBar().setTitle("Ficohsa | Seguros");

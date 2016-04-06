@@ -16,6 +16,9 @@ public class XmlTokenLoginResult {
     private String txt_suc;
     private String anio_pol;
     private String txt_estado_pol;
+    private String txt_agente;
+    private String fec_vig_desde;
+    private String fec_vig_hasta;
     private String txt_contratante;
     private String strError;
     private List<XmlTokenLoginResultItems> xmlTokenLoginResultItemsList;
@@ -179,5 +182,29 @@ public class XmlTokenLoginResult {
 
     public void setXmlNotificaciones(List<XmlNotificaciones> xmlNotificaciones) {
         this.xmlNotificaciones = xmlNotificaciones;
+    }
+
+    public String getTxt_agente() {
+        return txt_agente;
+    }
+
+    public void setTxt_agente(String txt_agente) {
+        this.txt_agente = txt_agente;
+    }
+
+    public String getFec_vig_desde() {
+        return fec_vig_desde;
+    }
+
+    public void setFec_vig_desde(String fec_vig_desde) {
+        this.fec_vig_desde = fec_vig_desde;
+    }
+
+    public String getFec_vig_hasta() {
+        return fec_vig_hasta;
+    }
+
+    public void setFec_vig_hasta(String fec_vig_hasta) {
+        this.fec_vig_hasta = fec_vig_hasta;
     }
 }

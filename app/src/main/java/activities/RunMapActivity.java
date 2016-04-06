@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.Map;
 
 import app.hn.com.ficohsaseguros.R;
+import asyntask.DetenerTracking;
+import asyntask.EncenderTracking;
 import asyntask.LoginWebService;
 import dto.XmlContainer;
 import intentservices.RSSPullService;
@@ -43,6 +45,9 @@ public class RunMapActivity extends Activity {
     private Activity activity;
     private AlertDialog.Builder dialogBuilder;
     private XmlTokenLoginResult xmlTokenLoginResult ;
+    private String gestionId,token;
+    private Map<String,String> xmlMotivosMap = new HashMap<String,String>();
+
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -74,11 +79,12 @@ public class RunMapActivity extends Activity {
             Gson gson = new Gson();
             BufferedReader br = new BufferedReader(new StringReader(json));
             xmlTokenLoginResult = gson.fromJson(br, XmlTokenLoginResult.class);
+            token = GetPrefs.getString(FicohsaConstants.PASSWORD, "");
+            gestionId = GetPrefs.getString(FicohsaConstants.GESTION_ID, "");
         }
 
         final ArrayList<String> listMotivos = new ArrayList<String>();
 
-        Map<String,String> xmlMotivosMap = new HashMap<String,String>();
         for(XmlMotivos xmlMotivos : xmlTokenLoginResult.getXmlMotivosList()){
             if(!xmlMotivosMap.containsKey(xmlMotivos.getId_motivo())){
                 xmlMotivosMap.put(xmlMotivos.getId_motivo(),xmlMotivos.getTxt_motivo());
@@ -90,11 +96,12 @@ public class RunMapActivity extends Activity {
         CharSequence[] items = listMotivos.toArray(new CharSequence[listMotivos.size()]);
 
         dialogBuilder = new AlertDialog.Builder(activity);
-        dialogBuilder.setTitle("Pick an option");
+        dialogBuilder.setTitle("Seleciona una opción");
         dialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                // Do anything you want here
+                String idMotivo = xmlTokenLoginResult.getXmlMotivosList().get(which).getId_motivo();
+                new DetenerTracking(activity).execute(token+";"+gestionId+";"+idMotivo);
             }
 
         });
@@ -133,7 +140,7 @@ public class RunMapActivity extends Activity {
 
                 SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
                 SharedPreferences.Editor editor = GetPrefs.edit();
-                editor.putString(FicohsaConstants.RUN_MAP_STARTED, "FALSE");
+                editor.putString(FicohsaConstants.RUN_MAP_STARTED, "TRUE");
                 editor.commit();
 
                 comenzarButton.setVisibility(View.INVISIBLE);
@@ -141,11 +148,14 @@ public class RunMapActivity extends Activity {
                 detenerButton.setVisibility(View.VISIBLE);
                 detenerButton.setEnabled(true);
 
+                new EncenderTracking(activity).execute(token+";"+gestionId);
+
+
 
                 Intent startServiceIntent = new Intent(getBaseContext(), RSSPullService.class);
                 PendingIntent startWebServicePendingIntent = PendingIntent.getService(getBaseContext(), 1111, startServiceIntent, 0);
                 AlarmManager alarmManager = (AlarmManager) getBaseContext().getSystemService(Context.ALARM_SERVICE);
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000, startWebServicePendingIntent);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, startWebServicePendingIntent);
                 Toast.makeText(activity, "Servicio iniciado", Toast.LENGTH_LONG).show();
                 ;
             }
@@ -158,7 +168,7 @@ public class RunMapActivity extends Activity {
 
                 SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
                 SharedPreferences.Editor editor = GetPrefs.edit();
-                editor.putString(FicohsaConstants.RUN_MAP_STARTED, "TRUE");
+                editor.putString(FicohsaConstants.RUN_MAP_STARTED, "FALSE");
                 editor.commit();
 
                 comenzarButton.setVisibility(View.VISIBLE);

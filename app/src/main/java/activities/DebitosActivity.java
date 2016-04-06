@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -20,6 +21,7 @@ import java.util.List;
 import adapters.AdapterDebitos;
 import app.hn.com.ficohsaseguros.R;
 import interfaces.OnItemClickListener;
+import interfaces.SimpleDividerItemDecoration;
 import models.XmlDebitos;
 import models.XmlEstadoCuenta;
 import models.XmlTokenLoginResult;
@@ -44,6 +46,12 @@ public class DebitosActivity extends Activity {
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.addItemDecoration(new SimpleDividerItemDecoration(this));
+
+
+        TextView textViewHeader = (TextView)findViewById(R.id.textView);
+        textViewHeader.setText("Débitos");
+
 
         activity = this;
 

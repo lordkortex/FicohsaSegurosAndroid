@@ -47,17 +47,17 @@ public class AdapterEstadoCuenta extends RecyclerView.Adapter<AdapterEstadoCuent
 
         public ViewHolder(View v) {
             super(v);
-            generic_field_id = (TextView) v.findViewById(R.id.generic_field_id);
-            generic_field_1 = (TextView) v.findViewById(R.id.generic_field_1);
-            generic_field_2 = (TextView) v.findViewById(R.id.generic_field_2);
-            generic_field_3 = (TextView) v.findViewById(R.id.generic_field_3);
-            generic_field_4 = (TextView) v.findViewById(R.id.generic_field_4);
-            generic_field_5 = (TextView) v.findViewById(R.id.generic_field_5);
-            generic_field_6 = (TextView) v.findViewById(R.id.generic_field_6);
-            generic_field_7 = (TextView) v.findViewById(R.id.generic_field_7);
-            generic_field_8 = (TextView) v.findViewById(R.id.generic_field_8);
-            generic_field_9 = (TextView) v.findViewById(R.id.generic_field_9);
-            generic_field_10= (TextView) v.findViewById(R.id.generic_field_10);
+            //generic_field_id = (TextView) v.findViewById(R.id.generic_field_id);
+            generic_field_1 = (TextView) v.findViewById(R.id.TextBoxValue1);
+            generic_field_2 = (TextView) v.findViewById(R.id.TextBoxValue2);
+            generic_field_3 = (TextView) v.findViewById(R.id.TextBoxValue3);
+            generic_field_4 = (TextView) v.findViewById(R.id.TextBoxValue4);
+            generic_field_5 = (TextView) v.findViewById(R.id.TextBoxValue5);
+            generic_field_6 = (TextView) v.findViewById(R.id.TextBoxValue6);
+            generic_field_7 = (TextView) v.findViewById(R.id.TextBoxValue7);
+            generic_field_8 = (TextView) v.findViewById(R.id.TextBoxValue8);
+            generic_field_9 = (TextView) v.findViewById(R.id.TextBoxValue9);
+            generic_field_10= (TextView) v.findViewById(R.id.TextBoxValue10);
             imageView = (ImageView) v.findViewById(R.id.generic_image);
             v.setOnClickListener(this);
         }
@@ -81,7 +81,7 @@ public class AdapterEstadoCuenta extends RecyclerView.Adapter<AdapterEstadoCuent
     @Override
     public AdapterEstadoCuenta.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_generico_item_estado_cuenta, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_item_titulo_valor_estado_cuenta, parent, false);
         ViewHolder vh = new ViewHolder(v);
         context = parent.getContext();
         return vh;
@@ -104,16 +104,16 @@ public class AdapterEstadoCuenta extends RecyclerView.Adapter<AdapterEstadoCuent
         String txt_moneda = node.getTxt_moneda();
         String fecha_cobranza = node.getFecha_cobranza();
 
-        holder.generic_field_1.setText("Numero de Cuota : ".concat(nro_cuota));
-        holder.generic_field_2.setText("Numero de Recibo : ".concat(nro_comprobante));
-        holder.generic_field_3.setText("Fecha Vencimiento : ".concat(fecha_vencimiento));
-        holder.generic_field_4.setText("Prima Total : ".concat(imp_prima_total));
-        holder.generic_field_5.setText("Fecha Proceso : ".concat(fecha_proceso));
-        holder.generic_field_6.setText("Estado : ".concat(txt_estado));
-        holder.generic_field_7.setText("Prima Deposito : ".concat(imp_prima_deposito));
-        holder.generic_field_8.setText("Prima Pagada : ".concat(imp_prima_pagada));
-        holder.generic_field_9.setText("Moneda : ".concat(txt_moneda));
-        holder.generic_field_10.setText("Fecha Cobranza : ".concat(fecha_cobranza));
+        holder.generic_field_1.setText(nro_cuota);
+        holder.generic_field_2.setText(nro_comprobante);
+        holder.generic_field_3.setText(fecha_vencimiento);
+        holder.generic_field_4.setText(imp_prima_total);
+        holder.generic_field_5.setText(fecha_proceso);
+        holder.generic_field_6.setText(txt_estado);
+        holder.generic_field_7.setText(imp_prima_deposito);
+        holder.generic_field_8.setText(imp_prima_pagada);
+        holder.generic_field_9.setText(txt_moneda);
+        holder.generic_field_10.setText(fecha_cobranza);
 
 
     }

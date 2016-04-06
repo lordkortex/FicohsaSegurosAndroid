@@ -84,7 +84,7 @@ public class MapActivity extends Activity {
 
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             Marker TP = googleMap.addMarker(new MarkerOptions().
-                    position(FicohsaPoint).title("Ficohsa Seguros"));
+                    position(FicohsaPoint).title("Usted esta aqui"));
 
             CameraUpdate center =
                     CameraUpdateFactory.newLatLng(FicohsaPoint);
@@ -110,7 +110,7 @@ public class MapActivity extends Activity {
                     ficohsaPoints.add(pointGestion);
 
                     if(initPoint == 0){
-                        googleMap.addMarker(new MarkerOptions().position(pointGestion).title("Punto Inicial"));
+                        googleMap.addMarker(new MarkerOptions().position(pointGestion).title("Asistencia en camino"));
                         initPoint ++;
                     }
 
@@ -118,7 +118,7 @@ public class MapActivity extends Activity {
                 }
                 initPoint = 0;
                 LatLng pointGestion = new LatLng(latitud, longitud);
-                googleMap.addMarker(new MarkerOptions().position(pointGestion).title("Punto Final"));
+                googleMap.addMarker(new MarkerOptions().position(pointGestion).title("Asistencia en camino"));
 
                 Polyline polyline = googleMap.addPolyline(ficohsaPoints);
             }

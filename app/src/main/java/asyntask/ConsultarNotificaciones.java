@@ -177,29 +177,32 @@ public class ConsultarNotificaciones  extends AsyncTask<String, Void, String> {
             if(root.hasProperty("clNotificacionMovil")){
                 SoapObject listaNotificacionesCl = (SoapObject) root.getProperty("clNotificacionMovil");
 
-                if(listaNotificacionesCl.hasProperty("notificacionMovil")){
-                    SoapObject listaNotificaciones = (SoapObject) listaNotificacionesCl.getProperty("notificacionMovil");
+                    for (int h = 0; h < listaNotificacionesCl.getPropertyCount(); h++) {
+
+                        if(listaNotificacionesCl.hasProperty("notificacionMovil")){
+                            //SoapObject listaNotificaciones = (SoapObject) listaNotificacionesCl.getProperty("notificacionMovil");
+                            SoapObject listaNotificaciones = (SoapObject) listaNotificacionesCl.getProperty(h);
+                            XmlNotificaciones xmlNotificaciones = new XmlNotificaciones();
+                            String id_notificacion = listaNotificaciones.getProperty("id_notificacion").toString();
+                            String txt_titulo = listaNotificaciones.getProperty("txt_titulo").toString();
+                            String txt_desc = listaNotificaciones.getProperty("txt_desc").toString();
+                            String fec_comp = listaNotificaciones.getProperty("fec_comp").toString();
+                            String imagenB64 = listaNotificaciones.getProperty("imagenB64").toString();
+
+                            xmlNotificaciones.setId_notificacion(id_notificacion);
+                            xmlNotificaciones.setTxt_desc(txt_desc);
+                            xmlNotificaciones.setTxt_titulo(txt_titulo);
+                            xmlNotificaciones.setFec_comp(fec_comp);
+                            xmlNotificaciones.setImagenB64(imagenB64);
+                            xmlNotificacionesList.add(xmlNotificaciones);
+                            //xmlNotificacionesList.add(xmlNotificaciones);
+                        }
 
 
-                    for (int h = 0; h < listaNotificaciones.getPropertyCount(); h++) {
-                        //SoapObject notificacionesList = (SoapObject) listaNotificaciones.getProperty(h);
-                        XmlNotificaciones xmlNotificaciones = new XmlNotificaciones();
-                        String id_notificacion = listaNotificaciones.getProperty("id_notificacion").toString();
-                        String txt_titulo = listaNotificaciones.getProperty("txt_titulo").toString();
-                        String txt_desc = listaNotificaciones.getProperty("txt_desc").toString();
-                        String fec_comp = listaNotificaciones.getProperty("fec_comp").toString();
-                        String imagenB64 = listaNotificaciones.getProperty("imagenB64").toString();
-
-                        xmlNotificaciones.setId_notificacion(id_notificacion);
-                        xmlNotificaciones.setTxt_desc(txt_desc);
-                        xmlNotificaciones.setTxt_titulo(txt_titulo);
-                        xmlNotificaciones.setFec_comp(fec_comp);
-                        xmlNotificaciones.setImagenB64(imagenB64);
-                        xmlNotificacionesList.add(xmlNotificaciones);
 
 
                         //XmlContainer.xmlMotivosList.put(id_motivo,txt_motivo);
-                }
+
                 }
             }
 

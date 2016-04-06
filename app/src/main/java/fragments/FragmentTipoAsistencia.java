@@ -25,7 +25,6 @@ import activities.FicohsaConstants;
 import adapters.AdapterMenuGridView;
 import app.hn.com.ficohsaseguros.R;
 import asyntask.CrearAsistenciaWebservice;
-import asyntask.CrearGestionWebservice;
 import dto.MenuItem;
 import models.XmlTokenLoginResult;
 
@@ -83,12 +82,12 @@ public class FragmentTipoAsistencia extends Fragment {
         gridArray.add(new MenuItem(Grua, "Grua"));
         gridArray.add(new MenuItem(Gasolina, "Gasolina"));
 
-        gridArray.add(new MenuItem(Bateria, "Bateria"));
-        gridArray.add(new MenuItem(Llantas, "Llantas"));
-        gridArray.add(new MenuItem(Otros, "Otros"));
+        gridArray.add(new MenuItem(Bateria, "Paso de Corriente"));
+        gridArray.add(new MenuItem(Llantas, "Cambio de Llanta"));
+        gridArray.add(new MenuItem(Otros, "Cerrajería Vial"));
 
         gridView = (GridView) getActivity().findViewById(R.id.gridView1);
-        customGridAdapter = new AdapterMenuGridView(getActivity(), R.layout.activiry_tipoasistencia_item, gridArray);
+        customGridAdapter = new AdapterMenuGridView(getActivity(), R.layout.activity_tipoasistencia_item, gridArray);
         gridView.setAdapter(customGridAdapter);
 
 

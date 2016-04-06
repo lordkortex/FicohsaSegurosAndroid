@@ -35,7 +35,9 @@ import java.util.ArrayList;
 import app.hn.com.ficohsaseguros.DrawerItem;
 import app.hn.com.ficohsaseguros.DrawerListAdapter;
 import app.hn.com.ficohsaseguros.R;
+import asyntask.ConsultaWebService;
 import asyntask.ConsultarNotificaciones;
+import asyntask.LoginWebService;
 import asyntask.ObtenerCoordenadaWebService;
 import fragments.FragmentConsulta;
 import fragments.FragmentEmpty;
@@ -94,14 +96,21 @@ public class MainActivity extends Activity implements LocationListener {
         // Define the criteria how to select the locatioin provider -> use
         // default
         Criteria criteria = new Criteria();
+        //criteria.setAccuracy(Criteria.ACCURACY_FINE);
+
         provider = locationManager.getBestProvider(criteria, false);
+        //provider = LocationManager.NETWORK_PROVIDER;
+        //provider = LocationManager.GPS_PROVIDER;
+        locationManager.requestLocationUpdates(provider, 0, 0, this);
         Location location = locationManager.getLastKnownLocation(provider);
 
+
+
         // Initialize the location fields
-        if (location != null) {
-            System.out.println("Provider " + provider + " has been selected.");
-            onLocationChanged(location);
-        }
+
+            //System.out.println("Provider " + provider + " has been selected.");
+           onLocationChanged(location);
+
 
 
         activity = this;
@@ -120,6 +129,7 @@ public class MainActivity extends Activity implements LocationListener {
             xmlTokenLoginResult = gson.fromJson(br, XmlTokenLoginResult.class);
         }
 
+        FragmentManager fragmentManager = getFragmentManager();
 
         if(xmlTokenLoginResult.getEsAsegurado().equalsIgnoreCase("true")){
             tagTitles = getResources().getStringArray(R.array.TagsCliente);
@@ -129,6 +139,15 @@ public class MainActivity extends Activity implements LocationListener {
             items.add(new DrawerItem(tagTitles[3],R.drawable.faq));
             items.add(new DrawerItem(tagTitles[4],R.drawable.exit));
 
+            Fragment fragmentPanicButton = new FragmentPanicButton();
+            Bundle args = new Bundle();
+            args.putInt("", 0);
+            args.putString("latitud", latitud);
+            args.putString("longitud", longitud);
+            fragmentPanicButton.setArguments(args);
+
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentPanicButton).commit();
+
         }else{
             tagTitles = getResources().getStringArray(R.array.TagsMotorista);
             items.add(new DrawerItem(tagTitles[0],R.drawable.home));
@@ -136,6 +155,10 @@ public class MainActivity extends Activity implements LocationListener {
             items.add(new DrawerItem(tagTitles[2],R.drawable.notify));
             items.add(new DrawerItem(tagTitles[3],R.drawable.faq));
             items.add(new DrawerItem(tagTitles[4],R.drawable.exit));
+
+            FragmentEmpty fragmentEmpty = new FragmentEmpty();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentEmpty).commit();
+
         }
 
 
@@ -172,18 +195,10 @@ public class MainActivity extends Activity implements LocationListener {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            selectItem(0);
+           // selectItem(0);
         }
 
-        FragmentManager fragmentManager = getFragmentManager();
-        Fragment fragmentPanicButton = new FragmentPanicButton();
-        Bundle args = new Bundle();
-        args.putInt("", 0);
-        args.putString("latitud", latitud);
-        args.putString("longitud", longitud);
-        fragmentPanicButton.setArguments(args);
 
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentPanicButton).commit();
 
 
     }
@@ -291,7 +306,7 @@ public class MainActivity extends Activity implements LocationListener {
                 ourintenConsultas.putExtras(bundle);
                 startActivity(ourintenConsultas);
                 break;
-            case "Ubicacion Asistencia":
+            case "Ubicación Asistencia":
                 //Intent ourintent = new Intent(activity, MapActivity.class);
                 //startActivity(ourintent);
                 new ObtenerCoordenadaWebService(this).execute(password);
@@ -304,14 +319,14 @@ public class MainActivity extends Activity implements LocationListener {
 
                 break;
             case "Consultas Generales":
-                fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentConsulta).commit();
+                //fragmentManager.beginTransaction().replace(R.id.content_frame, fragmentConsulta).commit();
+                new ConsultaWebService(activity).execute(password + ";0");
                 break;
             case "Gestiones":
-                Intent ourintenvGestiones = new Intent(activity, GestionesActivity.class);
-                startActivity(ourintenvGestiones);
-                //finish();
+                new LoginWebService(activity).execute(password+";1");
+           //finish();
                 break;
-            case "Cerrar Sesion":
+            case "Cerrar Sesión":
                 //SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = GetPrefs.edit();
                 editor.putString(FicohsaConstants.IS_LOGGED, "FALSE");
@@ -320,6 +335,8 @@ public class MainActivity extends Activity implements LocationListener {
                 Intent ourintenvLogin = new Intent(activity, LoginActivity.class);
                 startActivity(ourintenvLogin);
                 finish();
+                break;
+            default:
                 break;
 
         }
@@ -368,15 +385,20 @@ public class MainActivity extends Activity implements LocationListener {
     @Override
     protected void onPause() {
         super.onPause();
-        locationManager.removeUpdates(this);
+        //locationManager.removeUpdates(this);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        double lat = (location.getLatitude());
-        double lng =  (location.getLongitude());
-        latitud = String.valueOf(lat);
-        longitud= String.valueOf(lng);
+        if (location != null) {
+            double lat = (location.getLatitude());
+            double lng =  (location.getLongitude());
+            latitud = String.valueOf(lat);
+            longitud= String.valueOf(lng);
+        }else{
+            latitud = "0";
+            longitud = "0";
+        }
     }
 
     @Override
@@ -387,15 +409,15 @@ public class MainActivity extends Activity implements LocationListener {
 
     @Override
     public void onProviderEnabled(String provider) {
-        Toast.makeText(this, "Enabled new provider " + provider,
-                Toast.LENGTH_SHORT).show();
+        /*Toast.makeText(this, "Enabled new provider " + provider,
+                Toast.LENGTH_SHORT).show();*/
 
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        Toast.makeText(this, "Disabled provider " + provider,
-                Toast.LENGTH_SHORT).show();
+       /* Toast.makeText(this, "Disabled provider " + provider,
+                Toast.LENGTH_SHORT).show();*/
     }
 
 

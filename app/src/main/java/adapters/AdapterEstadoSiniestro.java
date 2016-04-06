@@ -45,12 +45,12 @@ public class AdapterEstadoSiniestro extends RecyclerView.Adapter<AdapterEstadoSi
 
         public ViewHolder(View v) {
             super(v);
-            generic_field_id = (TextView) v.findViewById(R.id.generic_field_id);
-            generic_field_1 = (TextView) v.findViewById(R.id.generic_field_1);
-            generic_field_2 = (TextView) v.findViewById(R.id.generic_field_2);
-            generic_field_3 = (TextView) v.findViewById(R.id.generic_field_3);
-            generic_field_4 = (TextView) v.findViewById(R.id.generic_field_4);
-            generic_field_5= (TextView) v.findViewById(R.id.generic_field_5);
+            //generic_field_id = (TextView) v.findViewById(R.id.generic_field_id);
+            generic_field_1 = (TextView) v.findViewById(R.id.TextBoxValue1);
+            generic_field_2 = (TextView) v.findViewById(R.id.TextBoxValue2);
+            generic_field_3 = (TextView) v.findViewById(R.id.TextBoxValue3);
+            generic_field_4 = (TextView) v.findViewById(R.id.TextBoxValue4);
+            generic_field_5= (TextView) v.findViewById(R.id.TextBoxValue5);
             imageView = (ImageView) v.findViewById(R.id.generic_image);
             v.setOnClickListener(this);
         }
@@ -74,7 +74,7 @@ public class AdapterEstadoSiniestro extends RecyclerView.Adapter<AdapterEstadoSi
     @Override
     public AdapterEstadoSiniestro.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                          int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_generico_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_list_item_titulo_valor_estado_siniestro, parent, false);
         ViewHolder vh = new ViewHolder(v);
         context = parent.getContext();
         return vh;
@@ -85,11 +85,11 @@ public class AdapterEstadoSiniestro extends RecyclerView.Adapter<AdapterEstadoSi
         XmlSiniestros node = mDataset.get(position);
 
 
-        holder.generic_field_1.setText("Numero de Siniestro : ".concat(node.getNro_siniestro()));
-        holder.generic_field_2.setText("Sucursal : ".concat(node.getTxt_suc()));
-        holder.generic_field_3.setText("Ramo : ".concat(node.getTxt_ramo()));
-        holder.generic_field_4.setText("Poliza : ".concat(node.getNro_pol()));
-        holder.generic_field_5.setText("Contratante: ".concat(node.getTxt_contratante()));
+        holder.generic_field_1.setText(node.getNro_siniestro());
+        holder.generic_field_2.setText(node.getTxt_suc());
+        holder.generic_field_3.setText(node.getTxt_ramo());
+        holder.generic_field_4.setText(node.getNro_pol());
+        holder.generic_field_5.setText(node.getTxt_contratante());
 
 
 

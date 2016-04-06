@@ -52,6 +52,7 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
     private static Registration regService = null;
     private GoogleCloudMessaging gcm;
     String regId ="";
+    String screenToCall = "";
     private static final String SENDER_ID = "274403199680";
 
     private Context context;
@@ -123,6 +124,7 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
         final String inputValues = params[0].toString();
         final String[] separatedInputValues = inputValues.split(";");
         final String pToken = separatedInputValues[0].toString();
+        screenToCall = separatedInputValues[1].toString();
         String response = "";
 
         try {
@@ -168,16 +170,18 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String json) {
 
          Boolean isLoggedIn = false;
-
-                if(xmlTokenLoginResult.getStrError() != null){
-                    if( xmlTokenLoginResult.getStrError().equals("")){
-                        isLoggedIn = true;
-                     }else{
-                        Toast.makeText(context, xmlTokenLoginResult.getStrError(), Toast.LENGTH_LONG).show();
-                    }
-                }else{
+        if(xmlTokenLoginResult != null){
+            if(xmlTokenLoginResult.getStrError() != null){
+                if( xmlTokenLoginResult.getStrError().equals("")){
                     isLoggedIn = true;
+                }else{
+                    Toast.makeText(context, xmlTokenLoginResult.getStrError(), Toast.LENGTH_LONG).show();
                 }
+            }else{
+                isLoggedIn = true;
+            }
+
+        }
 
         if(isLoggedIn){
             SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -187,9 +191,17 @@ public class LoginWebService extends AsyncTask<String, Void, String> {
             editor.putString(FicohsaConstants.TOKEN_ANDROID, regId);
             editor.commit();
 
-            Intent ourintent = new Intent(context, MainActivity.class);
-            this.context.startActivity(ourintent);
-            LoginActivity.activity.finish();
+            if("1".equals(screenToCall)){
+                Intent ourintenvGestiones = new Intent(context, GestionesActivity.class);
+                this.context.startActivity(ourintenvGestiones);
+
+            }else{
+                Intent ourintent = new Intent(context, MainActivity.class);
+                this.context.startActivity(ourintent);
+                LoginActivity.activity.finish();
+            }
+
+
 
         }
 

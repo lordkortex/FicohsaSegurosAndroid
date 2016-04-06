@@ -37,7 +37,7 @@ public class RSSPullService extends Service  {
     @Override
     public void onCreate() {
         super.onCreate();
-        Toast.makeText(this, "Service created...", Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, "Service created...", Toast.LENGTH_LONG).show();
         Log.i(tag, "Service created...");
     }
 

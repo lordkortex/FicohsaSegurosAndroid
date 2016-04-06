@@ -3,6 +3,7 @@ package adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -88,16 +89,22 @@ public class AdapterNotificaciones extends RecyclerView.Adapter<AdapterNotificac
         String txt_desc = node.getTxt_desc();
         String fec_comp = node.getFec_comp();
 
-        if(node.getImagenB64() != ""){
+        /*if(node.getImagenB64() != ""){
             String imagenB64 = node.getImagenB64().replace("data:image/jpeg;base64,","");
             byte[] decodedString = Base64.decode(imagenB64, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.imageView.setImageBitmap(decodedByte);
-        }
+        }else{
 
-        holder.generic_field_1.setText("id_notificacion : ".concat(id_notificacion));
-        holder.generic_field_2.setText(txt_titulo);
-        //holder.generic_field_3.setText(txt_desc);
+           String uri = "@drawable/headphone";  // where myresource (without the extension) is the file
+           int imageResource = context.getResources().getIdentifier(uri, null, context.getPackageName());
+           Drawable res = context.getResources().getDrawable(imageResource);
+            holder.imageView.setImageDrawable(res);
+        }*/
+
+        holder.generic_field_1.setText(txt_titulo);
+        holder.generic_field_2.setText(txt_desc);
+        holder.generic_field_3.setText(fec_comp);
         //holder.generic_field_4.setText(fec_comp);
         //holder.generic_field_5.setText("Prima Total: ".concat(imagenB64));
 

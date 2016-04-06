@@ -58,8 +58,8 @@ public class CrearGestionWebservice extends AsyncTask<String , Void, String> {
         final String inputValues = params[0].toString();
         final String[] separatedInputValues = inputValues.split(";");
         final String pToken = separatedInputValues[0].toString();
-        final String pLatitud = separatedInputValues[1].toString();
-        final String pLongitud =  separatedInputValues[2].toString();
+        String pLatitud = separatedInputValues[1].toString();
+        String pLongitud =  separatedInputValues[2].toString();
         final String pTokenAndroid =  separatedInputValues[3].toString();
         String xml = "";
 
@@ -79,6 +79,13 @@ public class CrearGestionWebservice extends AsyncTask<String , Void, String> {
             request.addProperty("pTokenAndroid", pTokenAndroid);
             request.addProperty("pTokenIos", pTokenIos);*/
 
+            if(pLatitud == "null"){
+                pLatitud = "";
+            }
+            if(pLongitud == "null"){
+                pLongitud = "";
+            }
+
             request.addProperty("pToken", pToken);
             request.addProperty("pSnSiniestro", "1");
             request.addProperty("pLatitud", pLatitud);
@@ -90,8 +97,14 @@ public class CrearGestionWebservice extends AsyncTask<String , Void, String> {
             request.addProperty("pNumPol", "0");
             request.addProperty("pAaaaPol", "0");
             request.addProperty("pCodAsegurado", "0");
+            request.addProperty("pTxtPlaca", "");
+            request.addProperty("pTxtMotor", "");
+            request.addProperty("pTxtChasis", "");
 
-            envelope.dotNet = true;
+
+
+
+                    envelope.dotNet = true;
             HttpTransportSE androidHttpTransport = new HttpTransportSE(URLWS,20000);
             androidHttpTransport.call(SOAP_ACTION1, envelope);
             SoapObject result = (SoapObject)envelope.bodyIn;

@@ -10,6 +10,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 
@@ -46,6 +48,10 @@ public class GestionesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notificaciones);
 
+        TextView textViewHeader = (TextView)findViewById(R.id.textView);
+        textViewHeader.setText("Gestiones");
+
+
         activity = this;
 
         mLayoutManager = new LinearLayoutManager(this);
@@ -53,9 +59,17 @@ public class GestionesActivity extends Activity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        getActionBar().setTitle("Gestiones");
         getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getActionBar().setCustomView(R.layout.actionbar_title);
+        getActionBar().setCustomView(R.layout.actionbar_tittle_back);
+
+        ImageButton b = (ImageButton) findViewById(R.id.imageViewBack);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.finish();
+            }
+        });
+
 
 
         SharedPreferences GetPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());

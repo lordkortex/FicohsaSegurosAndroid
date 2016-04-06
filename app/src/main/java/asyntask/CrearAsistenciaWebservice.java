@@ -55,8 +55,8 @@ public class CrearAsistenciaWebservice extends AsyncTask<String , Void, String> 
         final String[] separatedInputValues = inputValues.split(";");
         final String pToken = separatedInputValues[0].toString();
         final String pTipoAsistencia =  separatedInputValues[1].toString();
-        final String pLatitud = separatedInputValues[2].toString();
-        final String pLongitud =  separatedInputValues[3].toString();
+        String pLatitud = separatedInputValues[2].toString();
+        String pLongitud =  separatedInputValues[3].toString();
         //final String pTokenAndroid =  separatedInputValues[3].toString();
         String xml = "";
 
@@ -69,12 +69,12 @@ public class CrearAsistenciaWebservice extends AsyncTask<String , Void, String> 
             envelope.headerOut = new Element[1];
             envelope.headerOut[0] = buildAuthHeader();
 
-            /*request.addProperty("pToken", pToken);
-            request.addProperty("pIdTipoAsistencia", pIdTipoAsistencia);
-            request.addProperty("pLatitud", pLatitud);
-            request.addProperty("pLongitud", pLongitud);
-            request.addProperty("pTokenAndroid", pTokenAndroid);
-            request.addProperty("pTokenIos", pTokenIos);*/
+            if(pLatitud == null){
+                pLatitud = "";
+            }
+            if(pLongitud == null){
+                pLongitud = "";
+            }
 
             request.addProperty("pIdGestion", "0");
             request.addProperty("pIdTipoAsistencia", pTipoAsistencia);
